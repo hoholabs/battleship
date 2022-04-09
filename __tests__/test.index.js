@@ -1,4 +1,4 @@
-const { shipFactory, gameboardFactory, playerFactory } = require('../src/index')
+const { shipFactory, gameboardFactory, playerFactory } = require('../src/factories')
 
 
 describe.skip('ship stuff', () => {
@@ -50,7 +50,7 @@ describe.skip('gameboard', () => {
     });
 
     test('shoot at 7,7', () => {
-        expect(board.receiveAttack([7,7])).toBe(false);
+        expect(board.receiveAttack([7,7])).toBe([false,false]);
     });
 
     test('check misses', () => {
@@ -100,7 +100,19 @@ describe('player things', ()=>{
     });
 
     test('player attacks computer at 0,0', () =>{
-        expect(player.attack(computer,[0,0])).toBe(true);
+        expect(player.attack(computer,[0,0])).toEqual([true,false]); //hit, not sunk
+    });
+
+    test('computer attacks randomly',()=>{
+        expect(computer.attack(player,'random')).toHaveLength(2);
+    });
+
+    test('player attacks computer at 1,0', () =>{
+        expect(player.attack(computer,[1,0])).toStrictEqual([true,true]); //hit and sunk
+    });
+
+    test('check computer for gameOver', () => {
+        expect(computer.gameBoard.gameOver()).toBe(true); //all of computer's ships are sunk
     });
 
 });
