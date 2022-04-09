@@ -6,13 +6,19 @@ main {
   margin: auto;
   display: -ms-grid;
   display: grid;
-  grid-auto-flow: column;
   border: solid red 2px;
   width: 90vw;
-  height: 90vh;
+  height: 45vw;
+}
+
+#table {
+  display: -ms-grid;
+  display: grid;
+  grid-auto-flow: column;
 }
 
 .gameboard {
+  border: solid green 2px;
   display: -ms-grid;
   display: grid;
   width: 80%;
@@ -21,9 +27,13 @@ main {
       justify-self: center;
   -ms-grid-row-align: center;
       align-self: center;
-  -ms-grid-rows: (10%)[10];
-      grid-template-rows: repeat(10, 10%);
-  -ms-grid-columns: (10%)[10];
-      grid-template-columns: repeat(10, 10%);
+}
+
+.gameboard .axis {
+  background-color: paleturquoise;
+}
+
+.gameboard .tile {
+  background-color: skyblue;
 }
 /*# sourceMappingURL=style.css.map */

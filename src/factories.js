@@ -1,8 +1,6 @@
 import './style.css';
 import { createPage } from './dom.js';
 
-createPage();
-
 
 const shipFactory = (name, size) => {
 
@@ -30,7 +28,7 @@ const shipFactory = (name, size) => {
   return {name, size, hit, isSunk, shipState};
 };
 
-const gameboardFactory = () => {
+export const gameboardFactory = (name) => {
   // let axes = { 
   //   "x": ['0','1','2','3','4','5','6','7','8','9'],
   //   "y":   ['0','1','2','3','4','5','6','7','8','9']
@@ -47,14 +45,14 @@ const gameboardFactory = () => {
   let misses = [];
   // let shipCoords = [];
 
-  const placeShip = (name,l,x,y,o) =>{
+  const placeShip = (name,size,x,y,o) =>{
     
     // orientation, 0=horizontal, 1=vertical
-    let ship = shipFactory(name,l);
+    let ship = shipFactory(name,size);
     ship.pos = [];
     
     // add the ship coordinates to the ship
-    for (let index = 0; index < l; index++) {
+    for (let index = 0; index < size; index++) {
      
       if(o == 0){ //if horizontal
         ship.pos.push([x+index,y])
@@ -113,7 +111,7 @@ const gameboardFactory = () => {
     };
   }
 
-  return {placeShip, receiveAttack, gameOver, hits, misses};
+  return {name, placeShip, receiveAttack, gameOver, hits, misses, ships};
 };
 
 const playerFactory = (name) => {
@@ -137,8 +135,8 @@ const playerFactory = (name) => {
 
 }
 
-  module.exports = {
-    shipFactory,
-    gameboardFactory,
-    playerFactory
-};
+//   module.exports = {
+//     shipFactory,
+//     gameboardFactory,
+//     playerFactory
+// };

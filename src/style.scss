@@ -5,25 +5,32 @@
 main{
     margin:auto;
     display:grid;
-    grid-auto-flow: column;
+    //grid-auto-flow: column;
     border: solid red 2px;
     width: 90vw;
-    height: 90vh;
+    height: 45vw;
+}
+
+#table{
+    display:grid;
+    grid-auto-flow:column;
 }
 
 .gameboard{
-    //border: solid green 2px;
+    border: solid green 2px;
     display: grid;
     width:80%;
     height:80%;
     justify-self:center;
     align-self: center;
-    //gap: 0;
-    grid-template-rows: repeat(10, 10%);
-    grid-template-columns: repeat(10, 10%);
+    // grid-template-rows: repeat(10, 10%) 10%;
+    // grid-template-columns: 10% repeat(10, 10%);
 
-    // .tile{
-    //    width:25px;
-    //    height:25px;
-    // }
+    .axis{
+        background-color: paleturquoise;
+    }
+
+    .tile{
+       background-color: skyblue;
+    }
 }
