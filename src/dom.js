@@ -16,7 +16,7 @@ export function setupGameDom(player){
 
     //console.log(player.gameBoard.board);
 
-    mainContainer.append(player.gameBoard.board);
+    mainContainer.append(player.gameBoard.boardDisplay);
 
     let startMenu = document.createElement('div');
     startMenu.id = 'start-menu';
@@ -41,7 +41,7 @@ export function setupGameDom(player){
 
 export function startGameDom(computer){
 
-    mainContainer.append(computer.gameBoard.board);
+    mainContainer.append(computer.gameBoard.boardDisplay);
 
 }
 
@@ -66,7 +66,7 @@ export const domBoard = (name, num) =>{
         board.append(tile);
     };
 
-    return board
+    return board;
 }
 
 export function showShips(name){
@@ -74,7 +74,7 @@ export function showShips(name){
     name.gameBoard.ships.forEach(element => {
 
         element.pos.forEach(e => {
-            let thisTile = name.gameBoard.board.querySelectorAll(`[data-coord='${e.toString()}']`)[0];
+            let thisTile = name.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${e.toString()}']`)[0];
             thisTile.style.backgroundColor = 'grey';
         });
 

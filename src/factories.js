@@ -1,4 +1,4 @@
-//import { domBoard } from './dom.js';
+import { domBoard } from './dom.js';
 
 const shipFactory = (name, size) => {
 
@@ -87,9 +87,9 @@ export const gameboardFactory = (name,spaces) => {
     };
   }
 
-  const board = domBoard(name, spaces);
+  let boardDisplay = domBoard(name, spaces);
 
-  return {name, placeShip, receiveAttack, gameOver, hits, misses, ships,board};
+  return {name, placeShip, receiveAttack, gameOver, hits, misses, ships, boardDisplay};
 };
 
 export const playerFactory = (name,spaces) => {
@@ -113,8 +113,8 @@ export const playerFactory = (name,spaces) => {
 
 }
 
-  module.exports = {
-    shipFactory,
-    gameboardFactory,
-    playerFactory
-};
+//   module.exports = {
+//     shipFactory,
+//     gameboardFactory,
+//     playerFactory
+// };

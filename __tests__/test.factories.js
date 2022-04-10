@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 const { shipFactory, gameboardFactory, playerFactory } = require('../src/factories')
 
 
@@ -50,7 +54,7 @@ describe('gameboard', () => {
     });
 
     test('shoot at 7,7', () => {
-        expect(board.receiveAttack([7,7])).toBe([false,false]);
+        expect(board.receiveAttack([7,7])).toStrictEqual([false,false]);
     });
 
     test('check misses', () => {
