@@ -1,28 +1,56 @@
 :root{
-    background-color:burlywood;
+    background-color:deepskyblue;
 }
 
 main{
     margin:auto;
     display:grid;
-    //grid-auto-flow: column;
-    border: solid red 2px;
-    width: 90vw;
-    height: 45vw;
+    border: solid blue 2px;
+    width: 60vw;
+    height: 30vw;
+    grid-template-columns: 1fr 1fr;
 }
 
-#table{
+#start-menu{
     display:grid;
-    grid-auto-flow:column;
+    grid-template-rows: 10% 1fr ;
+    background-color: skyblue;
+    width:80%;
+    height:80%;
+    justify-self: center;
+    align-self: center;
+
+    #start-menu-title{
+        justify-self: center;
+        align-self: center;
+        grid-row-start:1;
+        grid-column-start:1;
+    }
+
+    #start-btn{
+        height:80%;
+        width:80%;
+        grid-row-start:1;
+        grid-row-end: -1;
+        grid-column-start:1;
+        justify-self:center;
+        align-self:center;
+        background-color:greenyellow;
+        border: solid green .1em;
+        border-radius: 50%;
+        font-size: 10em;
+        color:green;
+    }
 }
 
 .gameboard{
-    border: solid green 2px;
+    //border: solid green 2px;
     display: grid;
     width:80%;
     height:80%;
     justify-self:center;
     align-self: center;
+
     // grid-template-rows: repeat(10, 10%) 10%;
     // grid-template-columns: 10% repeat(10, 10%);
 

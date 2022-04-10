@@ -1,6 +1,4 @@
-import './style.css';
-import { createPage } from './dom.js';
-
+//import { domBoard } from './dom.js';
 
 const shipFactory = (name, size) => {
 
@@ -28,25 +26,14 @@ const shipFactory = (name, size) => {
   return {name, size, hit, isSunk, shipState};
 };
 
-export const gameboardFactory = (name) => {
-  // let axes = { 
-  //   "x": ['0','1','2','3','4','5','6','7','8','9'],
-  //   "y":   ['0','1','2','3','4','5','6','7','8','9']
-  // };
+export const gameboardFactory = (name,spaces) => {
 
-  // for (let i = 0; i < (axes.x.length*axes.y.length); i++) {
-  //   let tile = [Math.floor(i/10),(i%10),0];
-  //   board.push(tile)
-  // };
-
-  // let board = [];
   let ships = [];
   let hits = [];
   let misses = [];
-  // let shipCoords = [];
 
   const placeShip = (name,size,x,y,o) =>{
-    
+
     // orientation, 0=horizontal, 1=vertical
     let ship = shipFactory(name,size);
     ship.pos = [];
@@ -62,17 +49,6 @@ export const gameboardFactory = (name) => {
       };
     };
     ships.push(ship);
-
-
-    // //add the ship's positions to the shipCoords
-    // for (let index = 0; index < l; index++) {
-    //   if(o=='x'){//if horizontal
-    //     shipCoords.push([name,index,x+index,y]) 
-    //   } else {//if vertical
-    //     shipCoords.push([name,index,x,y+index]) 
-    //   }
-    // };
-
 
   };
 
@@ -111,12 +87,14 @@ export const gameboardFactory = (name) => {
     };
   }
 
-  return {name, placeShip, receiveAttack, gameOver, hits, misses, ships};
+  const board = domBoard(name, spaces);
+
+  return {name, placeShip, receiveAttack, gameOver, hits, misses, ships,board};
 };
 
-const playerFactory = (name) => {
+export const playerFactory = (name,spaces) => {
 
-  const gameBoard = gameboardFactory();
+  const gameBoard = gameboardFactory(name,spaces);
 
   const attack = (target, coords) =>{
 
@@ -135,8 +113,8 @@ const playerFactory = (name) => {
 
 }
 
-//   module.exports = {
-//     shipFactory,
-//     gameboardFactory,
-//     playerFactory
-// };
+  module.exports = {
+    shipFactory,
+    gameboardFactory,
+    playerFactory
+};

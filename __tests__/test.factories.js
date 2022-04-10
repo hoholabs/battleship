@@ -1,7 +1,7 @@
 const { shipFactory, gameboardFactory, playerFactory } = require('../src/factories')
 
 
-describe.skip('ship stuff', () => {
+describe('ship stuff', () => {
 
     let ship2 
 
@@ -32,7 +32,7 @@ describe.skip('ship stuff', () => {
 
 });
 
-describe.skip('gameboard', () => {
+describe('gameboard', () => {
 
     let board
 
@@ -96,7 +96,7 @@ describe('player things', ()=>{
     });
 
     test('player can recieve attacks',()=>{
-        expect (player.gameBoard.receiveAttack([0,0])).toStrictEqual([true,false]);
+        expect(player.gameBoard.receiveAttack([0,0])).toStrictEqual([true,false]);
     });
 
     test('player attacks computer at 0,0', () =>{
