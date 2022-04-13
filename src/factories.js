@@ -78,13 +78,13 @@ export const gameboardFactory = (name,spaces) => {
   };
 
   const gameOver = () =>{
-    for(let index = 0; index<ships.length;i++){
+    for(let index = 0; index<ships.length;index++){
       if(ships[index].isSunk() == false){
         return false;
-      } else{
-        return true;
-      }
+      } 
     };
+return true;
+
   }
 
   let boardDisplay = domBoard(name, spaces);

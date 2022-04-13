@@ -57,11 +57,12 @@ export const domBoard = (name, num) =>{
         let tile = document.createElement('button');
         tile.classList.add('tile');
         tile.dataset.coord = [(i%10),(Math.floor(i/10))];
-
+//click eventListener
         tile.addEventListener('click', ()=>{
             const thisCoord = tile.dataset.coord.split(",");
             computer.gameBoard.receiveAttack(thisCoord);
             showShips(computer);
+            console.log(computer.gameBoard.gameOver());
         })
         board.append(tile);
     };
@@ -97,12 +98,10 @@ export function showShips(playerName){
     });
 
     //show sunk ships
-
     playerName.gameBoard.ships.forEach(ship => {
 
         if(ship.isSunk()===true){
             ship.pos.forEach(pos => {
-                console.log(pos);
                 let thisTile = playerName.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${pos.toString()}']`)[0];
                  thisTile.style.backgroundColor = 'red';
             });
