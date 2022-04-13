@@ -6,7 +6,7 @@ import { setupGame } from './game';
 createPage();
 setupGame();
 
-// let playerBoard = gameboardFactory('playerBoard',10);
+// let playerBoard = gameboardFactory('startGameplayerBoard',10);
 // let computerBoard = gameboardFactory('computerBoard',10);
 
 // let table = document.getElementById('table');

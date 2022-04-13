@@ -1,6 +1,6 @@
 import { domBoard } from './dom.js';
 
-const shipFactory = (name, size) => {
+export const shipFactory = (name, size) => {
 
   let shipState = [];
 
@@ -102,7 +102,6 @@ export const playerFactory = (name,spaces) => {
       let x = Math.floor(Math.random()*10);
       let y = Math.floor(Math.random()*10);
       coords = [x,y];
-      console.log(coords)
     }
 
    return target.gameBoard.receiveAttack(coords);
@@ -113,8 +112,10 @@ export const playerFactory = (name,spaces) => {
 
 }
 
-//   module.exports = {
-//     shipFactory,
-//     gameboardFactory,
-//     playerFactory
-// };
+var module = module || {};
+
+  module.exports = {
+    shipFactory,
+    gameboardFactory,
+    playerFactory
+};

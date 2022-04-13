@@ -56,12 +56,12 @@ export const domBoard = (name, num) =>{
     for (let i = 0; i < (num*num); i++) {
         let tile = document.createElement('button');
         tile.classList.add('tile');
-        tile.dataset.coord = [(i%10),Math.floor(i/10)];
-        tile.addEventListener('click', ()=>{
-            console.log(tile.dataset.coord);
-            console.log(computer.gameBoard);
-            console.log(computer.gameBoard.receiveAttack(tile.dataset.coord));
+        tile.dataset.coord = [(i%10),(Math.floor(i/10))];
 
+        tile.addEventListener('click', ()=>{
+            const thisCoord = tile.dataset.coord.split(",");
+            computer.gameBoard.receiveAttack(thisCoord);
+            showShips(computer);
         })
         board.append(tile);
     };
@@ -69,15 +69,46 @@ export const domBoard = (name, num) =>{
     return board;
 }
 
-export function showShips(name){
+export function showShips(playerName){
 
-    name.gameBoard.ships.forEach(element => {
-
-        element.pos.forEach(e => {
-            let thisTile = name.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${e.toString()}']`)[0];
+    //look at all of the ships on the board owned by playerName
+    playerName.gameBoard.ships.forEach(ship => {
+        //remove the 'computer' part later
+        if(playerName.name == 'player' //|| playerName.name == 'computer'
+        ){
+            //show the tile of every ship as grey
+            ship.pos.forEach(e => {
+            let thisTile = playerName.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${e.toString()}']`)[0];
             thisTile.style.backgroundColor = 'grey';
-        });
-
+            });
+        };
     });
+
+    //show hits
+    playerName.gameBoard.hits.forEach(hit => {
+        let thisTile = playerName.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${hit.toString()}']`)[0];
+        thisTile.style.backgroundColor = 'orange';
+    });
+
+    //show misses
+    playerName.gameBoard.misses.forEach(miss => {
+        let thisTile = playerName.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${miss.toString()}']`)[0];
+        thisTile.style.backgroundColor = 'blue';
+    });
+
+    //show sunk ships
+
+    playerName.gameBoard.ships.forEach(ship => {
+
+        if(ship.isSunk()===true){
+            ship.pos.forEach(pos => {
+                console.log(pos);
+                let thisTile = playerName.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${pos.toString()}']`)[0];
+                 thisTile.style.backgroundColor = 'red';
+            });
+        }
+    });
+
+
 
 }
