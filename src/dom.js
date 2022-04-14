@@ -1,4 +1,4 @@
-import { startGame, player, computer } from './game';
+import { startGame, setupGame, human, computer } from './game';
 
 const mainContainer = document.createElement('main');
 mainContainer.id = 'main-container'; 
@@ -14,8 +14,6 @@ export function createPage(){
 
 export function setupGameDom(player){
 
-    //console.log(player.gameBoard.board);
-
     mainContainer.append(player.gameBoard.boardDisplay);
 
     let startMenu = document.createElement('div');
@@ -28,6 +26,7 @@ export function setupGameDom(player){
     let startBtn = document.createElement('button');
     startBtn.id = 'start-btn';
     startBtn.innerHTML = "GO";
+
     startBtn.addEventListener('click', ()=>{
         startMenu.remove();
         startGame();
@@ -63,6 +62,9 @@ export const domBoard = (name, num) =>{
             computer.gameBoard.receiveAttack(thisCoord);
             showShips(computer);
             console.log(computer.gameBoard.gameOver());
+            if (computer.gameBoard.gameOver()){
+                gameOverDisplay(human);
+            }
         })
         board.append(tile);
     };
@@ -70,39 +72,39 @@ export const domBoard = (name, num) =>{
     return board;
 }
 
-export function showShips(playerName){
+export function showShips(player){
+
 
     //look at all of the ships on the board owned by playerName
-    playerName.gameBoard.ships.forEach(ship => {
+    player.gameBoard.ships.forEach(ship => {
         //remove the 'computer' part later
-        if(playerName.name == 'player' //|| playerName.name == 'computer'
-        ){
+        if(player.name == 'human'){
             //show the tile of every ship as grey
             ship.pos.forEach(e => {
-            let thisTile = playerName.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${e.toString()}']`)[0];
+            let thisTile = player.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${e.toString()}']`)[0];
             thisTile.style.backgroundColor = 'grey';
             });
         };
     });
 
     //show hits
-    playerName.gameBoard.hits.forEach(hit => {
-        let thisTile = playerName.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${hit.toString()}']`)[0];
+    player.gameBoard.hits.forEach(hit => {
+        let thisTile = player.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${hit.toString()}']`)[0];
         thisTile.style.backgroundColor = 'orange';
     });
 
     //show misses
-    playerName.gameBoard.misses.forEach(miss => {
-        let thisTile = playerName.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${miss.toString()}']`)[0];
+    player.gameBoard.misses.forEach(miss => {
+        let thisTile = player.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${miss.toString()}']`)[0];
         thisTile.style.backgroundColor = 'blue';
     });
 
     //show sunk ships
-    playerName.gameBoard.ships.forEach(ship => {
+    player.gameBoard.ships.forEach(ship => {
 
         if(ship.isSunk()===true){
             ship.pos.forEach(pos => {
-                let thisTile = playerName.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${pos.toString()}']`)[0];
+                let thisTile = player.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${pos.toString()}']`)[0];
                  thisTile.style.backgroundColor = 'red';
             });
         }
@@ -110,4 +112,36 @@ export function showShips(playerName){
 
 
 
+}
+
+function clearMainContainer(){
+    console.log(mainContainer.children);
+
+    while (mainContainer.children.length>0) {
+        mainContainer.lastChild.remove();
+    }
+}
+
+function gameOverDisplay(player){
+
+    clearMainContainer();
+
+const newGameScreen = document.createElement('div');
+newGameScreen.id = 'new-game-screen';
+newGameScreen.textContent = `${player.name} wins!`
+
+const newGameBtn = document.createElement('button');
+newGameBtn.id = 'new-game-btn';
+newGameBtn.textContent = 'play again?';
+
+newGameBtn.addEventListener('click', ()=>{
+    clearMainContainer();
+    setupGame();
+
+});
+
+
+newGameScreen.append(newGameBtn);
+
+mainContainer.append(newGameScreen);
 }
