@@ -29,8 +29,19 @@ export const shipFactory = (name, size) => {
 export const gameboardFactory = (name,spaces) => {
 
   let ships = [];
+  let spots = [];
   let hits = [];
   let misses = [];
+
+  //Immediately invoked function to generate spots array//
+  (function() {
+    for (let index = 0; index < spaces*spaces; index++) {
+      let x = Math.floor(index/spaces);
+      let y = index%spaces;
+      let coord = [x,y];
+      spots.push(coord);
+    }
+  })();
 
   const placeShip = (name,size,x,y,o) =>{
 
@@ -53,6 +64,13 @@ export const gameboardFactory = (name,spaces) => {
   };
 
   const receiveAttack = ([x,y]) =>{
+    //console.log([x,y]);
+    //console.log(spots);
+    //console.log(spots.find(element => element == [x,y]));
+    console.log(spots[0] === [0,0]);
+    if(spots.find(element => element == [x,y])){
+      console.log('open spot');
+    }
 
     //look at each ship in the list
     for(let index = 0; index < ships.length; index++){

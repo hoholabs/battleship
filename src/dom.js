@@ -59,13 +59,22 @@ export const domBoard = (name, num) =>{
 //click eventListener
         tile.addEventListener('click', ()=>{
             const thisCoord = tile.dataset.coord.split(",");
+            thisCoord[0] = parseInt(thisCoord[0])
+            thisCoord[1] = parseInt(thisCoord[1])
             computer.gameBoard.receiveAttack(thisCoord);
             showShips(computer);
-            console.log(computer.gameBoard.gameOver());
+            //console.log(computer.gameBoard.gameOver());
             if (computer.gameBoard.gameOver()){
                 gameOverDisplay(human);
+            } else {
+                computer.attack(human, 'random');
+                showShips(human);
+                if (human.gameBoard.gameOver()){
+                    gameOverDisplay(computer);
+                }
             }
         })
+///
         board.append(tile);
     };
 
