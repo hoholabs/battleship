@@ -1,4 +1,4 @@
-import { startGame, setupGame, human, computer } from './game';
+import { startGame, setupGame } from './game';
 
 const mainContainer = document.createElement('main');
 mainContainer.id = 'main-container'; 
@@ -14,6 +14,7 @@ export function createPage(){
 
 export function setupGameDom(player){
 
+    //append the player's gameboard
     mainContainer.append(player.gameBoard.boardDisplay);
 
     let startMenu = document.createElement('div');
@@ -27,12 +28,14 @@ export function setupGameDom(player){
     startBtn.id = 'start-btn';
     startBtn.innerHTML = "GO";
 
-    startBtn.addEventListener('click', ()=>{
-        startMenu.remove();
-        startGame();
-    })
+    // startBtn.addEventListener('click', ()=>{
+    //     startMenu.remove();
+    //     startGame();
+    // })
 
     startMenu.append(startMenuTitle);
+    
+    //I want to call this once all ships are placed
     startMenu.append(startBtn);
 
     mainContainer.append(startMenu);
@@ -43,6 +46,50 @@ export function startGameDom(computer){
     mainContainer.append(computer.gameBoard.boardDisplay);
 
 }
+
+// export function shipPickerBoard(){
+
+//     let shipPalette = domBoard('palette',10);
+//     shipPalette.id = 'ship-palette';
+//     mainContainer.append(shipPalette);
+
+
+//     //show ships
+//     showPickedShip([0,0],5,1);
+//     showPickedShip([2,2],4,1);
+//     showPickedShip([4,4],3,1);
+//     showPickedShip([6,6],3,1);
+//     showPickedShip([8,8],2,1);
+
+// }
+
+// export function showPickedShip(start,size,direction){
+//     let shipPalette = document.getElementById('ship-palette');
+
+//     shipPalette.querySelector(`[data-coord="${start}"]`).style.backgroundColor = 'green'
+
+//     let blueTileCoord = [...start];
+//     let greyTileCoord = [...start];
+
+//     for (let index = 0; index < size-1; index++) {
+
+//         blueTileCoord[(direction==0 ? 1 : 0)]+=1;
+//         let blueTile = shipPalette.querySelector(`[data-coord="${blueTileCoord}"]`)
+//         blueTile.style.backgroundColor = 'skyblue'
+
+//         greyTileCoord[direction]+=1
+//         let greyTile = shipPalette.querySelector(`[data-coord="${greyTileCoord}"]`)
+//         greyTile.style.backgroundColor = 'silver'
+
+//     }
+
+
+// }
+
+// export function highlightPickedShip(start,size,direction){
+
+// }
+
 
 export const domBoard = (name, num) =>{
 
@@ -56,25 +103,24 @@ export const domBoard = (name, num) =>{
         let tile = document.createElement('button');
         tile.classList.add('tile');
         tile.dataset.coord = [(i%10),(Math.floor(i/10))];
-//click eventListener
-        tile.addEventListener('click', ()=>{
-            const thisCoord = tile.dataset.coord.split(",");
-            thisCoord[0] = parseInt(thisCoord[0])
-            thisCoord[1] = parseInt(thisCoord[1])
-            computer.gameBoard.receiveAttack(thisCoord);
-            showShips(computer);
-            //console.log(computer.gameBoard.gameOver());
-            if (computer.gameBoard.gameOver()){
-                gameOverDisplay(human);
-            } else {
-                computer.attack(human, 'random');
-                showShips(human);
-                if (human.gameBoard.gameOver()){
-                    gameOverDisplay(computer);
-                }
-            }
-        })
-///
+
+        // //click eventListener
+        // tile.addEventListener('click', ()=>{
+        //     const thisCoord = tile.dataset.coord.split(",");
+        //     thisCoord[0] = parseInt(thisCoord[0])
+        //     thisCoord[1] = parseInt(thisCoord[1])
+        //     computer.gameBoard.receiveAttack(thisCoord);
+        //     showShips(computer);
+        //     if (computer.gameBoard.gameOver()){
+        //         gameOverDisplay(human);
+        //     } else {
+        //         computer.attack(human, 'random');
+        //         showShips(human);
+        //         if (human.gameBoard.gameOver()){
+        //             gameOverDisplay(computer);
+        //         }
+        //     }
+        // })
         board.append(tile);
     };
 

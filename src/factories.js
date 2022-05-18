@@ -64,13 +64,18 @@ export const gameboardFactory = (name,spaces) => {
   };
 
   const receiveAttack = ([x,y]) =>{
-    //console.log([x,y]);
-    //console.log(spots);
-    //console.log(spots.find(element => element == [x,y]));
-    console.log(spots[0] === [0,0]);
-    if(spots.find(element => element == [x,y])){
-      console.log('open spot');
-    }
+    
+    misses.forEach(spot => {
+      if(spot[0] == x && spot[1] == y){
+        console.log('try again');
+      }
+    });
+
+    hits.forEach(spot => {
+      if(spot[0] == x && spot[1] == y){
+        console.log('try again');
+      }
+    });
 
     //look at each ship in the list
     for(let index = 0; index < ships.length; index++){
