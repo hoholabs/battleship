@@ -1,4 +1,5 @@
 import { startGame, setupGame } from './game';
+import {computer, human} from './index';
 
 const mainContainer = document.createElement('main');
 mainContainer.id = 'main-container'; 
@@ -22,7 +23,7 @@ export function setupGameDom(player){
 
     let startMenuTitle = document.createElement('div');
     startMenuTitle.id = 'start-menu-title';
-    startMenuTitle.textContent = "Place your ships!";
+    //startMenuTitle.textContent = "Place your ships!";
 
     let startBtn = document.createElement('button');
     startBtn.id = 'start-btn';
@@ -92,6 +93,7 @@ export function startGameDom(computer){
 
 
 export const domBoard = (name, num) =>{
+    
 
     let board = document.createElement('div')
     board.classList.add('gameboard');
@@ -103,24 +105,20 @@ export const domBoard = (name, num) =>{
         let tile = document.createElement('button');
         tile.classList.add('tile');
         tile.dataset.coord = [(i%10),(Math.floor(i/10))];
-
-        // //click eventListener
-        // tile.addEventListener('click', ()=>{
-        //     const thisCoord = tile.dataset.coord.split(",");
-        //     thisCoord[0] = parseInt(thisCoord[0])
-        //     thisCoord[1] = parseInt(thisCoord[1])
-        //     computer.gameBoard.receiveAttack(thisCoord);
-        //     showShips(computer);
-        //     if (computer.gameBoard.gameOver()){
-        //         gameOverDisplay(human);
-        //     } else {
-        //         computer.attack(human, 'random');
-        //         showShips(human);
-        //         if (human.gameBoard.gameOver()){
-        //             gameOverDisplay(computer);
-        //         }
-        //     }
-        // })
+        
+        //click eventListener
+        tile.addEventListener('click', ()=>{
+            const thisCoord = tile.dataset.coord.split(",");
+            thisCoord[0] = parseInt(thisCoord[0])
+            thisCoord[1] = parseInt(thisCoord[1])
+            if (computer.gameBoard.receiveAttack(thisCoord)== 'repeat'){
+                console.log('try again');
+            }else{
+            showShips(computer);
+            computer.attack(human,'random');
+            showShips(human);
+            }
+        })
         board.append(tile);
     };
 
@@ -129,11 +127,11 @@ export const domBoard = (name, num) =>{
 
 export function showShips(player){
 
-
     //look at all of the ships on the board owned by playerName
     player.gameBoard.ships.forEach(ship => {
+
         //remove the 'computer' part later
-        if(player.name == 'human'){
+        if(player.name == 'human' || 'computer'){
             //show the tile of every ship as grey
             ship.pos.forEach(e => {
             let thisTile = player.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${e.toString()}']`)[0];

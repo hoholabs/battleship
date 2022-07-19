@@ -65,17 +65,19 @@ export const gameboardFactory = (name,spaces) => {
 
   const receiveAttack = ([x,y]) =>{
     
-    misses.forEach(spot => {
-      if(spot[0] == x && spot[1] == y){
-        console.log('try again');
-      }
-    });
+    //check to see if the coord has already been used
 
-    hits.forEach(spot => {
-      if(spot[0] == x && spot[1] == y){
-        console.log('try again');
-      }
-    });
+    for (let index = 0; index < misses.length; index++) {
+      if(misses[index][0] == x && misses[index][1] == y){
+        return 'repeat';
+      };
+    }
+
+    for (let index = 0; index < hits.length; index++) {
+      if(hits[index][0] == x && hits[index][1] == y){
+        return 'repeat';
+      };
+    }
 
     //look at each ship in the list
     for(let index = 0; index < ships.length; index++){
