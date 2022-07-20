@@ -1,7 +1,7 @@
 import './style.css';
 import { createPage, setupGameDom, startGameDom, showShips} from './dom.js';
 import { playerFactory } from './factories';
-import { startGame, setupGame } from './game';
+
 
 createPage();
 

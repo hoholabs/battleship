@@ -1,4 +1,4 @@
-import { startGame, setupGame } from './game';
+
 import {computer, human} from './index';
 
 const mainContainer = document.createElement('main');
@@ -97,26 +97,51 @@ export const domBoard = (name, num) =>{
 
     let board = document.createElement('div')
     board.classList.add('gameboard');
-
+    //create a grid of a certain number of rows and columns
     board.style.gridTemplateRows = `repeat(${num}, ${100/(num)}%)`;
     board.style.gridTemplateColumns =`repeat(${num}, ${100/(num)}%)`;
 
+    //populate the grid with buttons
     for (let i = 0; i < (num*num); i++) {
         let tile = document.createElement('button');
         tile.classList.add('tile');
         tile.dataset.coord = [(i%10),(Math.floor(i/10))];
         
-        //click eventListener
+        //click board button eventListener
         tile.addEventListener('click', ()=>{
             const thisCoord = tile.dataset.coord.split(",");
             thisCoord[0] = parseInt(thisCoord[0])
             thisCoord[1] = parseInt(thisCoord[1])
+            
+            //in case of repeat click, don't move forward
             if (computer.gameBoard.receiveAttack(thisCoord)== 'repeat'){
                 console.log('try again');
             }else{
-            showShips(computer);
-            computer.attack(human,'random');
-            showShips(human);
+                //update the board visuals
+                showShips(computer);
+
+                //check for game over
+                if(computer.gameBoard.gameOver()){
+                    //game over screen
+                    gameOverDisplay(human);
+                }else{
+                        //computer attacks back
+                        while (computer.attack(human,'random')=='repeat') {
+                            console.log('again');
+                        }
+
+                    // if(computer.attack(human,'random')=='repeat'){
+                    //     console.log('gotcha');
+                    // }
+
+                    showShips(human);
+
+                    //check for gameover again
+                    if(human.gameBoard.gameOver()){
+                        //game over screen
+                        gameOverDisplay(computer);
+                    }
+                };
             }
         })
         board.append(tile);
@@ -183,18 +208,16 @@ const newGameScreen = document.createElement('div');
 newGameScreen.id = 'new-game-screen';
 newGameScreen.textContent = `${player.name} wins!`
 
-const newGameBtn = document.createElement('button');
-newGameBtn.id = 'new-game-btn';
-newGameBtn.textContent = 'play again?';
+// const newGameBtn = document.createElement('button');
+// newGameBtn.id = 'new-game-btn';
+// newGameBtn.textContent = 'play again?';
 
-newGameBtn.addEventListener('click', ()=>{
-    clearMainContainer();
-    setupGame();
-
-});
+// newGameBtn.addEventListener('click', ()=>{
+//     clearMainContainer();
+// });
 
 
-newGameScreen.append(newGameBtn);
+// newGameScreen.append(newGameBtn);
 
 mainContainer.append(newGameScreen);
 }
