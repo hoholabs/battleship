@@ -39,57 +39,59 @@ export function setupGameDom(player){
     //I want to call this once all ships are placed
     startMenu.append(startBtn);
 
-    mainContainer.append(startMenu);
+   mainContainer.append(startMenu);
+   //shipPickerBoard()
 };
 
 export function startGameDom(computer){
 
     mainContainer.append(computer.gameBoard.boardDisplay);
+    readyBoard(computer.gameBoard.boardDisplay);
 
 }
 
-// export function shipPickerBoard(){
+export function shipPickerBoard(){
 
-//     let shipPalette = domBoard('palette',10);
-//     shipPalette.id = 'ship-palette';
-//     mainContainer.append(shipPalette);
-
-
-//     //show ships
-//     showPickedShip([0,0],5,1);
-//     showPickedShip([2,2],4,1);
-//     showPickedShip([4,4],3,1);
-//     showPickedShip([6,6],3,1);
-//     showPickedShip([8,8],2,1);
-
-// }
-
-// export function showPickedShip(start,size,direction){
-//     let shipPalette = document.getElementById('ship-palette');
-
-//     shipPalette.querySelector(`[data-coord="${start}"]`).style.backgroundColor = 'green'
-
-//     let blueTileCoord = [...start];
-//     let greyTileCoord = [...start];
-
-//     for (let index = 0; index < size-1; index++) {
-
-//         blueTileCoord[(direction==0 ? 1 : 0)]+=1;
-//         let blueTile = shipPalette.querySelector(`[data-coord="${blueTileCoord}"]`)
-//         blueTile.style.backgroundColor = 'skyblue'
-
-//         greyTileCoord[direction]+=1
-//         let greyTile = shipPalette.querySelector(`[data-coord="${greyTileCoord}"]`)
-//         greyTile.style.backgroundColor = 'silver'
-
-//     }
+    let shipPalette = domBoard('palette',10);
+    shipPalette.id = 'ship-palette';
+    mainContainer.append(shipPalette);
 
 
-// }
+    //show ships
+    showPickedShip([0,0],5,1);
+    showPickedShip([2,2],4,1);
+    showPickedShip([4,4],3,1);
+    showPickedShip([6,6],3,1);
+    showPickedShip([8,8],2,1);
 
-// export function highlightPickedShip(start,size,direction){
+}
 
-// }
+export function showPickedShip(start,size,direction){
+    let shipPalette = document.getElementById('ship-palette');
+
+    shipPalette.querySelector(`[data-coord="${start}"]`).style.backgroundColor = 'green'
+
+    let blueTileCoord = [...start];
+    let greyTileCoord = [...start];
+
+    for (let index = 0; index < size-1; index++) {
+
+        blueTileCoord[(direction==0 ? 1 : 0)]+=1;
+        let blueTile = shipPalette.querySelector(`[data-coord="${blueTileCoord}"]`)
+        blueTile.style.backgroundColor = 'skyblue'
+
+        greyTileCoord[direction]+=1
+        let greyTile = shipPalette.querySelector(`[data-coord="${greyTileCoord}"]`)
+        greyTile.style.backgroundColor = 'silver'
+
+    }
+
+
+}
+
+export function highlightPickedShip(start,size,direction){
+
+}
 
 
 export const domBoard = (name, num) =>{
@@ -97,6 +99,8 @@ export const domBoard = (name, num) =>{
 
     let board = document.createElement('div')
     board.classList.add('gameboard');
+    board.id = name+'Gameboard';
+    
     //create a grid of a certain number of rows and columns
     board.style.gridTemplateRows = `repeat(${num}, ${100/(num)}%)`;
     board.style.gridTemplateColumns =`repeat(${num}, ${100/(num)}%)`;
@@ -108,42 +112,42 @@ export const domBoard = (name, num) =>{
         tile.dataset.coord = [(i%10),(Math.floor(i/10))];
         
         //click board button eventListener
-        tile.addEventListener('click', ()=>{
-            const thisCoord = tile.dataset.coord.split(",");
-            thisCoord[0] = parseInt(thisCoord[0])
-            thisCoord[1] = parseInt(thisCoord[1])
-            
-            //in case of repeat click, don't move forward
-            if (computer.gameBoard.receiveAttack(thisCoord)== 'repeat'){
-                console.log('try again');
-            }else{
-                //update the board visuals
-                showShips(computer);
+        // tile.addEventListener('click', ()=>{
+        //     const thisCoord = tile.dataset.coord.split(",");
+        //     thisCoord[0] = parseInt(thisCoord[0]);
+        //     thisCoord[1] = parseInt(thisCoord[1]);
 
-                //check for game over
-                if(computer.gameBoard.gameOver()){
-                    //game over screen
-                    gameOverDisplay(human);
-                }else{
-                        //computer attacks back
-                        while (computer.attack(human,'random')=='repeat') {
-                            console.log('again');
-                        }
+        //     //in case of repeat click, don't move forward
+        //     if (computer.gameBoard.receiveAttack(thisCoord)== 'repeat'){
+        //         console.log('try again');
+        //     }else{
+        //         //update the board visuals
+        //         showShips(computer);
 
-                    // if(computer.attack(human,'random')=='repeat'){
-                    //     console.log('gotcha');
-                    // }
+        //         //check for game over
+        //         if(computer.gameBoard.gameOver()){
+        //             //game over screen
+        //             gameOverDisplay(human);
+        //         }else{
+        //                 //computer attacks back
+        //                 while (computer.attack(human,'random')=='repeat') {
+        //                     console.log('again');
+        //                 }
 
-                    showShips(human);
+        //             // if(computer.attack(human,'random')=='repeat'){
+        //             //     console.log('gotcha');
+        //             // }
 
-                    //check for gameover again
-                    if(human.gameBoard.gameOver()){
-                        //game over screen
-                        gameOverDisplay(computer);
-                    }
-                };
-            }
-        })
+        //             showShips(human);
+
+        //             //check for gameover again
+        //             if(human.gameBoard.gameOver()){
+        //                 //game over screen
+        //                 gameOverDisplay(computer);
+        //             }
+        //         };
+        //     }
+        // })
         board.append(tile);
     };
 
@@ -156,7 +160,9 @@ export function showShips(player){
     player.gameBoard.ships.forEach(ship => {
 
         //remove the 'computer' part later
-        if(player.name == 'human' || 'computer'){
+        if(player.name == 'human' 
+         || 'computer'
+        ){
             //show the tile of every ship as grey
             ship.pos.forEach(e => {
             let thisTile = player.gameBoard.boardDisplay.querySelectorAll(`[data-coord='${e.toString()}']`)[0];
@@ -220,4 +226,50 @@ newGameScreen.textContent = `${player.name} wins!`
 // newGameScreen.append(newGameBtn);
 
 mainContainer.append(newGameScreen);
+}
+
+function readyBoard(board){
+
+        console.log(board.children.length);
+        for (let index = 0; index < board.children.length; index++) {
+            const tile = board.children[index];
+
+            tile.addEventListener('click', ()=>{
+                const thisCoord = tile.dataset.coord.split(",");
+                thisCoord[0] = parseInt(thisCoord[0]);
+                thisCoord[1] = parseInt(thisCoord[1]);
+    
+                //in case of repeat click, don't move forward
+                if (computer.gameBoard.receiveAttack(thisCoord)== 'repeat'){
+                    console.log('try again');
+                }else{
+                    //update the board visuals
+                    showShips(computer);
+    
+                    //check for game over
+                    if(computer.gameBoard.gameOver()){
+                        //game over screen
+                        gameOverDisplay(human);
+                    }else{
+                            //computer attacks back
+                            while (computer.attack(human,'random')=='repeat') {
+                                console.log('again');
+                            }
+    
+                        // if(computer.attack(human,'random')=='repeat'){
+                        //     console.log('gotcha');
+                        // }
+    
+                        showShips(human);
+    
+                        //check for gameover again
+                        if(human.gameBoard.gameOver()){
+                            //game over screen
+                            gameOverDisplay(computer);
+                        }
+                    };
+                }
+            })
+            
+        }
 }

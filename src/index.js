@@ -2,7 +2,6 @@ import './style.css';
 import { createPage, setupGameDom, startGameDom, showShips} from './dom.js';
 import { playerFactory } from './factories';
 
-
 createPage();
 
 //create player objects for human and computer
@@ -10,7 +9,7 @@ export let human = playerFactory('human',10)
 export let computer = playerFactory('computer',10)
 
 
-//automatically placeall the ships for the human player
+//automatically place all the ships for the human player
 human.gameBoard.placeShip('patrol',2,0,0,1);
 human.gameBoard.placeShip('submarine',3,0,3,1);
 human.gameBoard.placeShip('destroyer',3,0,7,1);
@@ -22,6 +21,7 @@ showShips(human);
 
 //show thestart game menu 
 setupGameDom(human);
+
 
 let startBtn = document.getElementById('start-btn');
 let startMenu = document.getElementById('start-menu');
@@ -39,4 +39,6 @@ startBtn.addEventListener('click', ()=>{
     computer.gameBoard.placeShip('carrier',5,2,9,0);
 
     showShips(computer);
+    
 })
+
