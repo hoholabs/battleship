@@ -39,8 +39,8 @@ export function setupGameDom(player){
     //I want to call this once all ships are placed
     startMenu.append(startBtn);
 
-   mainContainer.append(startMenu);
-   //shipPickerBoard()
+   //mainContainer.append(startMenu);
+   shipPickerBoard()
 };
 
 export function startGameDom(computer){
@@ -69,23 +69,31 @@ export function shipPickerBoard(){
 export function showPickedShip(start,size,direction){
     let shipPalette = document.getElementById('ship-palette');
 
-    shipPalette.querySelector(`[data-coord="${start}"]`).style.backgroundColor = 'green'
+    let rotateTile = shipPalette.querySelector(`[data-coord="${start}"]`);
+    rotateTile.style.backgroundColor = 'green'
+
+    //event listener to rotate tile to flip the ship
+    rotateTile.addEventListener('click', ()=>{
+        let newDirection = direction ==0 ? 1 : 0;
+        showPickedShip(start,size,newDirection)
+    })
 
     let blueTileCoord = [...start];
     let greyTileCoord = [...start];
 
     for (let index = 0; index < size-1; index++) {
 
+        //turns tiles in not direction blue
         blueTileCoord[(direction==0 ? 1 : 0)]+=1;
         let blueTile = shipPalette.querySelector(`[data-coord="${blueTileCoord}"]`)
         blueTile.style.backgroundColor = 'skyblue'
 
+        //turns tiles in direction silver
         greyTileCoord[direction]+=1
         let greyTile = shipPalette.querySelector(`[data-coord="${greyTileCoord}"]`)
         greyTile.style.backgroundColor = 'silver'
 
     }
-
 
 }
 
@@ -230,7 +238,6 @@ mainContainer.append(newGameScreen);
 
 function readyBoard(board){
 
-        console.log(board.children.length);
         for (let index = 0; index < board.children.length; index++) {
             const tile = board.children[index];
 
