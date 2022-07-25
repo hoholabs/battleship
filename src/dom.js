@@ -40,7 +40,9 @@ export function setupGameDom(player){
     startMenu.append(startBtn);
 
    //mainContainer.append(startMenu);
+   let currentShip = ['name','size','direction',];
    shipPickerBoard()
+   shipDropperBoard();
 };
 
 export function startGameDom(computer){
@@ -50,6 +52,8 @@ export function startGameDom(computer){
 
 }
 
+let currentShip = ['name','size','direction'];
+
 export function shipPickerBoard(){
 
     let shipPalette = domBoard('palette',10);
@@ -58,15 +62,49 @@ export function shipPickerBoard(){
 
 
     //show ships
-    showPickedShip([0,0],5,1);
-    showPickedShip([2,2],4,1);
-    showPickedShip([4,4],3,1);
-    showPickedShip([6,6],3,1);
-    showPickedShip([8,8],2,1);
+    showPickedShip('carrier',[0,0],5,1);
+    showPickedShip('battleship',[2,2],4,1);
+    showPickedShip('destroyer',[4,4],3,1);
+    showPickedShip('submarine',[6,6],3,1);
+    showPickedShip('patrol',[8,8],2,1);
 
 }
 
-export function showPickedShip(start,size,direction){
+export function shipDropperBoard(){
+    let playerBoard = document.getElementById('humanGameboard');
+
+
+    for (let index = 0; index < playerBoard.children.length; index++) {
+        const element = playerBoard.children[index];
+
+        let coords = element.dataset.coord.split(",");
+
+        element.addEventListener('click',()=>{
+
+            let coordsX = parseInt(coords[0]);
+            let coordsY = parseInt(coords[1]);
+
+            let shipName = currentShip[0];
+            let shipLength = currentShip[1];
+            let shipDirection = currentShip[2];
+
+            console.log([shipName,shipLength,coordsX,coordsY,shipDirection])
+
+            human.gameBoard.placeShip(shipName,shipLength,coordsX,coordsY,shipDirection);
+            showShips(human)
+        })
+        
+    }
+}
+
+export function showPickedShip(name,start,size,direction){
+
+    //
+    //make this so it's just when it's clicked
+    //
+
+    currentShip = [name,size,direction];
+
     let shipPalette = document.getElementById('ship-palette');
 
     let rotateTile = shipPalette.querySelector(`[data-coord="${start}"]`);
@@ -75,11 +113,16 @@ export function showPickedShip(start,size,direction){
     //event listener to rotate tile to flip the ship
     rotateTile.addEventListener('click', ()=>{
         let newDirection = direction ==0 ? 1 : 0;
-        showPickedShip(start,size,newDirection)
+        showPickedShip(name,start,size,newDirection)
     })
 
     let blueTileCoord = [...start];
     let greyTileCoord = [...start];
+    
+    function shipPicked(){
+        currentShip = [name,size,direction];
+        console.log(currentShip);
+    };
 
     for (let index = 0; index < size-1; index++) {
 
@@ -87,12 +130,14 @@ export function showPickedShip(start,size,direction){
         blueTileCoord[(direction==0 ? 1 : 0)]+=1;
         let blueTile = shipPalette.querySelector(`[data-coord="${blueTileCoord}"]`)
         blueTile.style.backgroundColor = 'skyblue'
+        
 
         //turns tiles in direction silver
         greyTileCoord[direction]+=1
         let greyTile = shipPalette.querySelector(`[data-coord="${greyTileCoord}"]`)
         greyTile.style.backgroundColor = 'silver'
 
+        greyTile.addEventListener("click",shipPicked);
     }
 
 }
@@ -100,7 +145,6 @@ export function showPickedShip(start,size,direction){
 export function highlightPickedShip(start,size,direction){
 
 }
-
 
 export const domBoard = (name, num) =>{
     

@@ -22,7 +22,6 @@ showShips(human);
 //show thestart game menu 
 setupGameDom(human);
 
-
 let startBtn = document.getElementById('start-btn');
 let startMenu = document.getElementById('start-menu');
 
