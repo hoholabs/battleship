@@ -47,8 +47,19 @@ export function setupGameDom(player){
 
 export function startGameDom(computer){
 
+    let shipPalette = document.getElementById('ship-palette');
+    shipPalette.remove();
+
     mainContainer.append(computer.gameBoard.boardDisplay);
     readyBoard(computer.gameBoard.boardDisplay);
+
+    computer.gameBoard.placeShip('patrol',2,0,0,0);
+    computer.gameBoard.placeShip('submarine',3,3,3,1);
+    computer.gameBoard.placeShip('destroyer',3,5,5,1);
+    computer.gameBoard.placeShip('battleship',4,3,1,0);
+    computer.gameBoard.placeShip('carrier',5,2,9,0);
+
+    //showShips(computer);
 
 }
 
@@ -72,7 +83,7 @@ export function shipPickerBoard(){
 
 export function shipDropperBoard(){
     let playerBoard = document.getElementById('humanGameboard');
-
+    let shipDropCounter = 0;
 
     for (let index = 0; index < playerBoard.children.length; index++) {
         const element = playerBoard.children[index];
@@ -90,21 +101,24 @@ export function shipDropperBoard(){
             let shipLength = currentShip[2];
             let shipDirection = currentShip[3];
 
-            console.log([shipName,shipLength,coordsX,coordsY,shipDirection]);
-
             human.gameBoard.placeShip(shipName,shipLength,coordsX,coordsY,shipDirection);
 
             hidePickedShip(shipName,start,shipLength,shipDirection);
             unHighlightShip();
             showShips(human);
+            shipDropCounter+=1
+            if(shipDropCounter==5){
+                console.log("start game")
+                startGameDom(computer);
+            };
         })
         
     }
+
 }
 
 const shipPicked= function(){
 
-    console.log('picked');
 };
 
 export function showPickedShip(name,start,size,direction){
@@ -141,7 +155,7 @@ export function showPickedShip(name,start,size,direction){
         greyTile.addEventListener('click',unHighlightShip,true);
         greyTile.onclick = function(){currentShip  = [name,start,size,direction]};
         greyTile.addEventListener('click',highlightShip,true);
-        //console.log('added');
+     
         
     } 
 
@@ -151,7 +165,7 @@ function hidePickedShip(name,start,size,direction){
 
     let shipPalette = document.getElementById('ship-palette');
     let blueTileCoord = [...start];
-    console.log(blueTileCoord);
+   
 
     for (let index = 0; index < size; index++) {
 
@@ -163,7 +177,7 @@ function hidePickedShip(name,start,size,direction){
         blueTile.removeEventListener('click',shipPicked,true);
         blueTile.removeEventListener('click',highlightShip,true);
         blueTile.onclick = null;
-        //console.log("removed");
+
         blueTileCoord[(direction==0 ? 0 : 1)]+=1;
     }
 
@@ -198,7 +212,7 @@ export function showShips(player){
 
         //remove the 'computer' part later
         if(player.name == 'human' 
-         || 'computer'
+         //|| 'computer'
         ){
             //show the tile of every ship as grey
             ship.pos.forEach(e => {
@@ -276,7 +290,7 @@ function readyBoard(board){
     
                 //in case of repeat click, don't move forward
                 if (computer.gameBoard.receiveAttack(thisCoord)== 'repeat'){
-                    console.log('try again');
+                  
                 }else{
                     //update the board visuals
                     showShips(computer);
@@ -288,12 +302,8 @@ function readyBoard(board){
                     }else{
                             //computer attacks back
                             while (computer.attack(human,'random')=='repeat') {
-                                console.log('again');
+                      
                             }
-    
-                        // if(computer.attack(human,'random')=='repeat'){
-                        //     console.log('gotcha');
-                        // }
     
                         showShips(human);
     
