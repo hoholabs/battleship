@@ -86,14 +86,17 @@ export function shipDropperBoard(){
             let coordsY = parseInt(coords[1]);
 
             let shipName = currentShip[0];
+            let start = currentShip[1];
             let shipLength = currentShip[2];
             let shipDirection = currentShip[3];
 
-            console.log([shipName,shipLength,coordsX,coordsY,shipDirection])
+            console.log([shipName,shipLength,coordsX,coordsY,shipDirection]);
 
             human.gameBoard.placeShip(shipName,shipLength,coordsX,coordsY,shipDirection);
 
-            showShips(human)
+            hidePickedShip(shipName,start,shipLength,shipDirection);
+            unHighlightShip();
+            showShips(human);
         })
         
     }
@@ -107,19 +110,26 @@ const shipPicked= function(){
 export function showPickedShip(name,start,size,direction){
 
     let shipPalette = document.getElementById('ship-palette');
-
+    
     let rotateTile = shipPalette.querySelector(`[data-coord="${start}"]`);
+    
+
     rotateTile.style.backgroundColor = 'green'
 
     //event listener to rotate tile to flip the ship
+    
     rotateTile.addEventListener('click', ()=>{  
 
         hidePickedShip(name,start,size,direction);
-
+        unHighlightShip();
         let newDirection = direction == 0 ? 1 : 0;   
            
         showPickedShip(name,start,size,newDirection)
+        currentShip  = [name,start,size,newDirection]
+        highlightShip();
     })
+    
+    rotateTile.onclick = function(){};
 
     let greyTileCoord = [...start];
 
@@ -128,6 +138,7 @@ export function showPickedShip(name,start,size,direction){
         greyTileCoord[direction]+=1
         let greyTile = shipPalette.querySelector(`[data-coord="${greyTileCoord}"]`)
         greyTile.style.backgroundColor = 'silver'
+        greyTile.addEventListener('click',unHighlightShip,true);
         greyTile.onclick = function(){currentShip  = [name,start,size,direction]};
         greyTile.addEventListener('click',highlightShip,true);
         //console.log('added');
@@ -140,11 +151,12 @@ function hidePickedShip(name,start,size,direction){
 
     let shipPalette = document.getElementById('ship-palette');
     let blueTileCoord = [...start];
+    console.log(blueTileCoord);
 
-    for (let index = 0; index < size-1; index++) {
+    for (let index = 0; index < size; index++) {
 
         //turns tiles in not direction blue
-        blueTileCoord[(direction==0 ? 0 : 1)]+=1;
+        
         let blueTile = shipPalette.querySelector(`[data-coord="${blueTileCoord}"]`)
         blueTile.style.backgroundColor = 'skyblue'
         
@@ -152,7 +164,7 @@ function hidePickedShip(name,start,size,direction){
         blueTile.removeEventListener('click',highlightShip,true);
         blueTile.onclick = null;
         //console.log("removed");
-        
+        blueTileCoord[(direction==0 ? 0 : 1)]+=1;
     }
 
 }
@@ -299,39 +311,40 @@ function readyBoard(board){
 
 function highlightShip(){
 
-   let shipPalette = document.getElementById('ship-palette');
+    //let currentShip = ['name','start','size','direction'];
+    let shipPalette = document.getElementById('ship-palette');
 
-   let length = currentShip[1];
-   let direction = currentShip[2];
-   let start = shipPalette.querySelector(`[data-coord="${currentShip[3]}"]`);
+    let length = currentShip[2];
+    let direction = currentShip[3];
+    let startTile = shipPalette.querySelector(`[data-coord="${currentShip[1]}"]`);
 
-   if(direction == 0){
+    if(direction == 0){
 
         //add tile-border-left ot start tile
-        start.classList.add('tile-border-left')
+        startTile.classList.add('tile-border-left')
 
         for (let index = 0; index < length; index++) {
             //add tile border top and bottom to every tile in ship
-            shipPalette.querySelector(`[data-coord="${currentShip[3][0]+index},${currentShip[3][1]}"]`).classList.add('tile-border-top','tile-border-bottom');
+            shipPalette.querySelector(`[data-coord="${currentShip[1][0]+index},${currentShip[1][1]}"]`).classList.add('tile-border-top','tile-border-bottom');
         }
 
         //add tile-border-right to last tile
-        shipPalette.querySelector(`[data-coord="${currentShip[3][0]+length-1},${currentShip[3][1]}"]`).classList.add('tile-border-right');
+        shipPalette.querySelector(`[data-coord="${currentShip[1][0]+length-1},${currentShip[1][1]}"]`).classList.add('tile-border-right');
 
    };
 
    if(direction == 1){
 
         //add tile-border-left ot start tile
-        start.classList.add('tile-border-top')
+        startTile.classList.add('tile-border-top')
 
         for (let index = 0; index < length; index++) {
             //add tile border top and bottom to every tile in ship
-            shipPalette.querySelector(`[data-coord="${currentShip[3][0]},${currentShip[3][1]+index}"]`).classList.add('tile-border-left','tile-border-right');
+            shipPalette.querySelector(`[data-coord="${currentShip[1][0]},${currentShip[1][1]+index}"]`).classList.add('tile-border-left','tile-border-right');
         }
 
         //add tile-border-right to last tile
-        shipPalette.querySelector(`[data-coord="${currentShip[3][0]},${currentShip[3][1]+length-1}"]`).classList.add('tile-border-bottom');
+        shipPalette.querySelector(`[data-coord="${currentShip[1][0]},${currentShip[1][1]+length-1}"]`).classList.add('tile-border-bottom');
 
 
    };
@@ -339,5 +352,43 @@ function highlightShip(){
 }
 
 function unHighlightShip(){
-    console.log(currentShip);
+
+    //let currentShip = ['name','start','size','direction'];
+    let shipPalette = document.getElementById('ship-palette');
+
+    let length = currentShip[2];
+    let direction = currentShip[3];
+    let startTile = shipPalette.querySelector(`[data-coord="${currentShip[1]}"]`);
+
+    if(direction == 0){
+
+        //add tile-border-left ot start tile
+        startTile.classList.remove('tile-border-left')
+
+        for (let index = 0; index < length; index++) {
+            //add tile border top and bottom to every tile in ship
+            shipPalette.querySelector(`[data-coord="${currentShip[1][0]+index},${currentShip[1][1]}"]`).classList.remove('tile-border-top','tile-border-bottom');
+        }
+
+        //add tile-border-right to last tile
+        shipPalette.querySelector(`[data-coord="${currentShip[1][0]+length-1},${currentShip[1][1]}"]`).classList.remove('tile-border-right');
+
+   };
+
+   if(direction == 1){
+
+        //add tile-border-left ot start tile
+        startTile.classList.remove('tile-border-top')
+
+        for (let index = 0; index < length; index++) {
+            //add tile border top and bottom to every tile in ship
+            shipPalette.querySelector(`[data-coord="${currentShip[1][0]},${currentShip[1][1]+index}"]`).classList.remove('tile-border-left','tile-border-right');
+        }
+
+        //add tile-border-right to last tile
+        shipPalette.querySelector(`[data-coord="${currentShip[1][0]},${currentShip[1][1]+length-1}"]`).classList.remove('tile-border-bottom');
+
+
+   };
+
 }
