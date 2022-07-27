@@ -52,7 +52,7 @@ export function startGameDom(computer){
 
 }
 
-let currentShip = ['name','size','direction'];
+let currentShip = ['name','start','size','direction'];
 
 export function shipPickerBoard(){
 
@@ -79,31 +79,32 @@ export function shipDropperBoard(){
 
         let coords = element.dataset.coord.split(",");
 
+        //place ship event listener
         element.addEventListener('click',()=>{
 
             let coordsX = parseInt(coords[0]);
             let coordsY = parseInt(coords[1]);
 
             let shipName = currentShip[0];
-            let shipLength = currentShip[1];
-            let shipDirection = currentShip[2];
+            let shipLength = currentShip[2];
+            let shipDirection = currentShip[3];
 
             console.log([shipName,shipLength,coordsX,coordsY,shipDirection])
 
             human.gameBoard.placeShip(shipName,shipLength,coordsX,coordsY,shipDirection);
+
             showShips(human)
         })
         
     }
 }
 
+const shipPicked= function(){
+
+    console.log('picked');
+};
+
 export function showPickedShip(name,start,size,direction){
-
-    //
-    //make this so it's just when it's clicked
-    //
-
-    currentShip = [name,size,direction];
 
     let shipPalette = document.getElementById('ship-palette');
 
@@ -111,38 +112,48 @@ export function showPickedShip(name,start,size,direction){
     rotateTile.style.backgroundColor = 'green'
 
     //event listener to rotate tile to flip the ship
-    rotateTile.addEventListener('click', ()=>{
-        let newDirection = direction ==0 ? 1 : 0;
+    rotateTile.addEventListener('click', ()=>{  
+
+        hidePickedShip(name,start,size,direction);
+
+        let newDirection = direction == 0 ? 1 : 0;   
+           
         showPickedShip(name,start,size,newDirection)
     })
 
-    let blueTileCoord = [...start];
     let greyTileCoord = [...start];
-    
-    function shipPicked(){
-        currentShip = [name,size,direction];
-        console.log(currentShip);
-    };
+
+    for (let index = 0; index < size-1; index++) {
+
+        greyTileCoord[direction]+=1
+        let greyTile = shipPalette.querySelector(`[data-coord="${greyTileCoord}"]`)
+        greyTile.style.backgroundColor = 'silver'
+        greyTile.onclick = function(){currentShip  = [name,start,size,direction]};
+        greyTile.addEventListener('click',highlightShip,true);
+        //console.log('added');
+        
+    } 
+
+}
+
+function hidePickedShip(name,start,size,direction){
+
+    let shipPalette = document.getElementById('ship-palette');
+    let blueTileCoord = [...start];
 
     for (let index = 0; index < size-1; index++) {
 
         //turns tiles in not direction blue
-        blueTileCoord[(direction==0 ? 1 : 0)]+=1;
+        blueTileCoord[(direction==0 ? 0 : 1)]+=1;
         let blueTile = shipPalette.querySelector(`[data-coord="${blueTileCoord}"]`)
         blueTile.style.backgroundColor = 'skyblue'
         
-
-        //turns tiles in direction silver
-        greyTileCoord[direction]+=1
-        let greyTile = shipPalette.querySelector(`[data-coord="${greyTileCoord}"]`)
-        greyTile.style.backgroundColor = 'silver'
-
-        greyTile.addEventListener("click",shipPicked);
+        blueTile.removeEventListener('click',shipPicked,true);
+        blueTile.removeEventListener('click',highlightShip,true);
+        blueTile.onclick = null;
+        //console.log("removed");
+        
     }
-
-}
-
-export function highlightPickedShip(start,size,direction){
 
 }
 
@@ -162,44 +173,6 @@ export const domBoard = (name, num) =>{
         let tile = document.createElement('button');
         tile.classList.add('tile');
         tile.dataset.coord = [(i%10),(Math.floor(i/10))];
-        
-        //click board button eventListener
-        // tile.addEventListener('click', ()=>{
-        //     const thisCoord = tile.dataset.coord.split(",");
-        //     thisCoord[0] = parseInt(thisCoord[0]);
-        //     thisCoord[1] = parseInt(thisCoord[1]);
-
-        //     //in case of repeat click, don't move forward
-        //     if (computer.gameBoard.receiveAttack(thisCoord)== 'repeat'){
-        //         console.log('try again');
-        //     }else{
-        //         //update the board visuals
-        //         showShips(computer);
-
-        //         //check for game over
-        //         if(computer.gameBoard.gameOver()){
-        //             //game over screen
-        //             gameOverDisplay(human);
-        //         }else{
-        //                 //computer attacks back
-        //                 while (computer.attack(human,'random')=='repeat') {
-        //                     console.log('again');
-        //                 }
-
-        //             // if(computer.attack(human,'random')=='repeat'){
-        //             //     console.log('gotcha');
-        //             // }
-
-        //             showShips(human);
-
-        //             //check for gameover again
-        //             if(human.gameBoard.gameOver()){
-        //                 //game over screen
-        //                 gameOverDisplay(computer);
-        //             }
-        //         };
-        //     }
-        // })
         board.append(tile);
     };
 
@@ -251,7 +224,6 @@ export function showShips(player){
 }
 
 function clearMainContainer(){
-    console.log(mainContainer.children);
 
     while (mainContainer.children.length>0) {
         mainContainer.lastChild.remove();
@@ -281,7 +253,7 @@ mainContainer.append(newGameScreen);
 }
 
 function readyBoard(board){
-
+//readys the computer's board for play
         for (let index = 0; index < board.children.length; index++) {
             const tile = board.children[index];
 
@@ -323,4 +295,49 @@ function readyBoard(board){
             })
             
         }
+}
+
+function highlightShip(){
+
+   let shipPalette = document.getElementById('ship-palette');
+
+   let length = currentShip[1];
+   let direction = currentShip[2];
+   let start = shipPalette.querySelector(`[data-coord="${currentShip[3]}"]`);
+
+   if(direction == 0){
+
+        //add tile-border-left ot start tile
+        start.classList.add('tile-border-left')
+
+        for (let index = 0; index < length; index++) {
+            //add tile border top and bottom to every tile in ship
+            shipPalette.querySelector(`[data-coord="${currentShip[3][0]+index},${currentShip[3][1]}"]`).classList.add('tile-border-top','tile-border-bottom');
+        }
+
+        //add tile-border-right to last tile
+        shipPalette.querySelector(`[data-coord="${currentShip[3][0]+length-1},${currentShip[3][1]}"]`).classList.add('tile-border-right');
+
+   };
+
+   if(direction == 1){
+
+        //add tile-border-left ot start tile
+        start.classList.add('tile-border-top')
+
+        for (let index = 0; index < length; index++) {
+            //add tile border top and bottom to every tile in ship
+            shipPalette.querySelector(`[data-coord="${currentShip[3][0]},${currentShip[3][1]+index}"]`).classList.add('tile-border-left','tile-border-right');
+        }
+
+        //add tile-border-right to last tile
+        shipPalette.querySelector(`[data-coord="${currentShip[3][0]},${currentShip[3][1]+length-1}"]`).classList.add('tile-border-bottom');
+
+
+   };
+   
+}
+
+function unHighlightShip(){
+    console.log(currentShip);
 }

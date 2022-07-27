@@ -61,6 +61,19 @@ main{
     .tile{
        background-color: skyblue;
     }
+
+    .tile-border-top{
+        border-top: 2px solid black;
+    }
+    .tile-border-bottom{
+        border-bottom: 2px solid black;
+    }
+    .tile-border-left{
+        border-left: 2px solid black;
+    }
+    .tile-border-right{
+        border-right: 2px solid black;
+    }
 }
 
 #new-game-screen{

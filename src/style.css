@@ -78,6 +78,22 @@ main {
   background-color: skyblue;
 }
 
+.gameboard .tile-border-top {
+  border-top: 2px solid black;
+}
+
+.gameboard .tile-border-bottom {
+  border-bottom: 2px solid black;
+}
+
+.gameboard .tile-border-left {
+  border-left: 2px solid black;
+}
+
+.gameboard .tile-border-right {
+  border-right: 2px solid black;
+}
+
 #new-game-screen {
   background-color: blue;
   -ms-grid-column: 1;
