@@ -1,6 +1,6 @@
 import { domBoard } from './dom.js';
 
-export const shipFactory = (name, size) => {
+const shipFactory = (name, size) => {
 
   let shipState = [];
 
@@ -26,7 +26,7 @@ export const shipFactory = (name, size) => {
   return {name, size, hit, isSunk, shipState};
 };
 
-export const gameboardFactory = (name,spaces) => {
+const gameboardFactory = (name,spaces) => {
 
   let ships = [];
   let spots = [];
@@ -59,6 +59,7 @@ export const gameboardFactory = (name,spaces) => {
         ship.pos.push([x,y+index])
       };
     };
+    //add the ship to ships
     ships.push(ship);
 
   };
