@@ -39,8 +39,6 @@ export function setupGameDom(player){
     //I want to call this once all ships are placed
     startMenu.append(startBtn);
 
-   //mainContainer.append(startMenu);
-   //let currentShip = ['name','size','direction',];
    shipPickerBoard()
    shipDropperBoard();
 };
@@ -64,10 +62,10 @@ function startGameDom(computer){
 }
 
 const currentShip = {
-    name:'name',
-    start:{x:0,y:0},
-    size:'size',
-    direction:'direction'
+    name:null,
+    start:{x:null,y:null},
+    size: null,
+    direction:null
 };
 
 function shipPickerBoard(){
@@ -88,7 +86,6 @@ function shipPickerBoard(){
 
 function shipDropperBoard(){
     let playerBoard = document.getElementById('humanGameboard');
-    let shipDropCounter = 0;
 
     for (let index = 0; index < playerBoard.children.length; index++) {
         const element = playerBoard.children[index];
@@ -113,17 +110,16 @@ function shipDropperBoard(){
 
             hidePickedShip(shipName,start,shipLength,shipDirection);
             unHighlightShip();
-            
-            currentShip.name = 'name';
-            currentShip.start.x = 'x';
-            currentShip.start.y = 'y';
-            currentShip.size = 'size';
-            currentShip.direction = 'direction';
+
+            currentShip.name = null;
+            currentShip.start.x = null;
+            currentShip.start.y = null;
+            currentShip.size = null;
+            currentShip.direction = null;
 
             
             showShips(human);
-            shipDropCounter+=1
-            if(shipDropCounter==5){
+            if(human.gameBoard.ships.length==5){
                 console.log("start game")
                 startGameDom(computer);
             };
@@ -383,7 +379,6 @@ function highlightShip(){
 
 function unHighlightShip(){
 
-    //let currentShip = ['name','start','size','direction'];
     let shipPalette = document.getElementById('ship-palette');
 
     let startCoord = [currentShip.start.x,currentShip.start.y]

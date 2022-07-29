@@ -45,6 +45,10 @@ const gameboardFactory = (name,spaces) => {
 
   const placeShip = (name,size,x,y,o) =>{
 
+    if(name === null){
+      return console.log('invalid ship');
+    }
+
     // orientation, 0=horizontal, 1=vertical
     let ship = shipFactory(name,size);
     ship.pos = [];
@@ -125,7 +129,7 @@ export const playerFactory = (name,spaces) => {
   const attack = (target, coords) =>{
 
     if (coords == 'ai'){
-      console.log(human);
+
       let x = Math.floor(Math.random()*10);
       let y = Math.floor(Math.random()*10);
       coords = [x,y];
