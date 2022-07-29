@@ -124,7 +124,8 @@ export const playerFactory = (name,spaces) => {
 
   const attack = (target, coords) =>{
 
-    if (coords == 'random'){
+    if (coords == 'ai'){
+      console.log(human);
       let x = Math.floor(Math.random()*10);
       let y = Math.floor(Math.random()*10);
       coords = [x,y];

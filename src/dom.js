@@ -109,8 +109,18 @@ function shipDropperBoard(){
 
             human.gameBoard.placeShip(shipName,shipLength,coordsX,coordsY,shipDirection);
 
+            
+
             hidePickedShip(shipName,start,shipLength,shipDirection);
             unHighlightShip();
+            
+            currentShip.name = 'name';
+            currentShip.start.x = 'x';
+            currentShip.start.y = 'y';
+            currentShip.size = 'size';
+            currentShip.direction = 'direction';
+
+            
             showShips(human);
             shipDropCounter+=1
             if(shipDropCounter==5){
@@ -313,8 +323,8 @@ function readyBoard(board){
                         gameOverDisplay(human);
                     }else{
                             //computer attacks back
-                            while (computer.attack(human,'random')=='repeat') {
-                      
+                            while (computer.attack(human,'ai')=='repeat') {
+                                //only repeats if 'repeat' is returned
                             }
     
                         showShips(human);
