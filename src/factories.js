@@ -46,7 +46,13 @@ const gameboardFactory = (name,spaces) => {
   const placeShip = (name,size,x,y,o) =>{
 
     if(name === null){
-      return console.log('invalid ship');
+      console.log('invalid ship');
+      return 0;
+    }
+
+    if(spaces-size-x<0 || spaces-size-y<0){
+      console.log('invalid ship placement');
+      return 0;
     }
 
     // orientation, 0=horizontal, 1=vertical
@@ -65,6 +71,7 @@ const gameboardFactory = (name,spaces) => {
     };
     //add the ship to ships
     ships.push(ship);
+    return 1;
 
   };
 
@@ -129,7 +136,8 @@ export const playerFactory = (name,spaces) => {
   const attack = (target, coords) =>{
 
     if (coords == 'ai'){
-
+      //do this better later
+      //random square chosen
       let x = Math.floor(Math.random()*10);
       let y = Math.floor(Math.random()*10);
       coords = [x,y];
