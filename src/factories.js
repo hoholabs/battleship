@@ -50,10 +50,12 @@ const gameboardFactory = (name,spaces) => {
       return 0;
     }
 
-    if(spaces-size-x<0 || spaces-size-y<0){
+    if((o== 0 && spaces-size-x<0) || (o==1 && spaces-size-y<0)){
       console.log('invalid ship placement');
       return 0;
     }
+
+    console.log(ships);
 
     // orientation, 0=horizontal, 1=vertical
     let ship = shipFactory(name,size);
