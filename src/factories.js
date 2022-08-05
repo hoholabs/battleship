@@ -44,6 +44,7 @@ const gameboardFactory = (name,spaces) => {
   })();
 
   const placeShip = (name,size,x,y,o) =>{
+    let isError = 1;
 
     if(name === null){
       console.log('invalid ship');
@@ -54,8 +55,6 @@ const gameboardFactory = (name,spaces) => {
       console.log('invalid ship placement');
       return 0;
     }
-
-    console.log(ships);
 
     // orientation, 0=horizontal, 1=vertical
     let ship = shipFactory(name,size);
@@ -71,6 +70,29 @@ const gameboardFactory = (name,spaces) => {
         ship.pos.push([x,y+index])
       };
     };
+
+    //check ship's pos against other ships' positions to prevent overlap
+
+    ships.forEach(existingShip => {
+
+      existingShip.pos.forEach(existingShipPosition => {
+        
+        ship.pos.forEach(newShipPosition => {
+
+          if(newShipPosition[0] === existingShipPosition[0] && 
+            newShipPosition[1] === existingShipPosition[1]){
+            console.log('ships overlap');
+            isError = 0;
+          }
+        });
+
+      });
+    });
+
+    if(isError === 0){
+      return 0;
+    }
+
     //add the ship to ships
     ships.push(ship);
     return 1;

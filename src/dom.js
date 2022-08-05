@@ -104,7 +104,7 @@ function shipDropperBoard(){
             let shipLength = currentShip.size;
             let shipDirection = currentShip.direction;
 
-            if(human.gameBoard.placeShip(shipName,shipLength,coordsX,coordsY,shipDirection)==1){
+            if(human.gameBoard.placeShip(shipName,shipLength,coordsX,coordsY,shipDirection)===1){
             hidePickedShip(shipName,start,shipLength,shipDirection);
             unHighlightShip();
 
