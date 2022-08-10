@@ -31,6 +31,7 @@ const gameboardFactory = (name,spaces) => {
   let ships = [];
   let spots = [];
   let hits = [];
+  let sinks = [];
   let misses = [];
 
   //Immediately invoked function to generate spots array//
@@ -82,13 +83,15 @@ const gameboardFactory = (name,spaces) => {
           if(newShipPosition[0] === existingShipPosition[0] && 
             newShipPosition[1] === existingShipPosition[1]){
             console.log('ships overlap');
+             ///I don't like this at all. But it works for now. Should fix when I know more
+             ///return 0 didn't work here, and I don't know why
             isError = 0;
           }
         });
 
       });
     });
-
+    ///I don't like this at all. But it works for now. Should fix when I know more
     if(isError === 0){
       return 0;
     }
@@ -100,6 +103,7 @@ const gameboardFactory = (name,spaces) => {
   };
 
   const receiveAttack = ([x,y]) =>{
+    console.log('attack received'+x+y)
     
     //check to see if the coord has already been used
 
@@ -128,6 +132,14 @@ const gameboardFactory = (name,spaces) => {
         if (currentCoord[0] == x && currentCoord[1] == y){
           hits.push([x,y]);
           currentShip.hit(index);
+          
+          if(currentShip.isSunk()){
+            currentShip.pos.forEach(sunkShipPosition => {
+              sinks.push(sunkShipPosition);
+            });
+            console.log(sinks);
+          }
+
           return [true,currentShip.isSunk()];
         };
       };
@@ -150,7 +162,7 @@ return true;
 
   let boardDisplay = domBoard(name, spaces);
 
-  return {name, placeShip, receiveAttack, gameOver, hits, misses, ships, boardDisplay};
+  return {name, placeShip, receiveAttack, gameOver, hits, sinks, misses, ships, boardDisplay};
 };
 
 export const playerFactory = (name,spaces) => {
@@ -159,15 +171,52 @@ export const playerFactory = (name,spaces) => {
 
   const attack = (target, coords) =>{
 
+    let attackCoords = [0,0];
+    
     if (coords == 'ai'){
-      //do this better later
+      console.log('coords = ai'); 
+
       //random square chosen
       let x = Math.floor(Math.random()*10);
       let y = Math.floor(Math.random()*10);
-      coords = [x,y];
+      attackCoords = [x,y];
+
+      let sinkArray = target.gameBoard.sinks;
+      let hitsArray = target.gameBoard.hits;
+
+      //check hits against sinks. If hit doesn't match any sinks, strike near the hit
+
+      hitsArray.forEach(hitPosition => {
+        //console.log(hitPosition);
+      
+      //   //check to see if it's in a sink
+      //   //if it's not in a sink, attack a nearby position
+        if(!sinkArray.some(checkSinks)){
+          console.log(hitPosition+'hit position not in sink')
+
+      //     //choose x or y
+           let zeroOrOne = Math.round(Math.random());
+
+      //     //add or subtract 1
+           let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+
+            attackCoords = [...hitPosition];
+            attackCoords[zeroOrOne] += plusOrMinus;
+            console.log(attackCoords);
+
+        }
+
+        function checkSinks(sinkPosition){
+          return hitPosition[0]==sinkPosition[0] && hitPosition[1]==sinkPosition[1];
+        }
+
+      });
+
+    }else{
+      attackCoords = coords;
     }
 
-   return target.gameBoard.receiveAttack(coords);
+   return target.gameBoard.receiveAttack(attackCoords);
 
   };
 
