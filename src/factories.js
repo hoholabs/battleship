@@ -137,7 +137,7 @@ const gameboardFactory = (name,spaces) => {
             currentShip.pos.forEach(sunkShipPosition => {
               sinks.push(sunkShipPosition);
             });
-            console.log(sinks);
+            //console.log(sinks);
           }
 
           return [true,currentShip.isSunk()];
@@ -183,35 +183,88 @@ export const playerFactory = (name,spaces) => {
 
       let sinkArray = target.gameBoard.sinks;
       let hitsArray = target.gameBoard.hits;
+      let nakedHitsArray = [];
 
-      //check hits against sinks. If hit doesn't match any sinks, strike near the hit
+      //clear any sinks from nakedHitsArray
 
-      hitsArray.forEach(hitPosition => {
-        //console.log(hitPosition);
-      
-      //   //check to see if it's in a sink
-      //   //if it's not in a sink, attack a nearby position
-        if(!sinkArray.some(checkSinks)){
-          console.log(hitPosition+'hit position not in sink')
+      nakedHitsArray.forEach(nakedHit => {
 
-      //     //choose x or y
-           let zeroOrOne = Math.round(Math.random());
+        for (let index = 0; index < sinkArray.length; index++) {
+          let thisSink = sinkArray[index];
 
-      //     //add or subtract 1
-           let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-
-            attackCoords = [...hitPosition];
-            attackCoords[zeroOrOne] += plusOrMinus;
-            console.log(attackCoords);
-
+          if(thisSink[0]==nakedHit[0] && thisSink[1]==nakedHit[1]){
+            
+          }
+          
         }
+ 
+      });
 
-        function checkSinks(sinkPosition){
-          return hitPosition[0]==sinkPosition[0] && hitPosition[1]==sinkPosition[1];
+
+      //make a list of hits that are not in sinks
+      hitsArray.forEach(hitPosition => {
+        if (!sinkArray.includes(hitPosition)){
+         
+          nakedHitsArray.push(hitPosition);
+          //console.log(nakedHitsArray);
         }
 
       });
+      //randomly choose one of those hits
 
+      let randomNakedHit = nakedHitsArray[Math.floor(Math.random() * nakedHitsArray.length)];
+      //console.log(randomNakedHit);
+
+      //if randomNakedHit is defined
+      if (typeof randomNakedHit !== 'undefined') {
+
+      //choose x or y
+      let zeroOrOne = Math.round(Math.random());
+
+      //add or subtract 1
+      let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+
+      attackCoords = [...randomNakedHit];
+      attackCoords[zeroOrOne] += plusOrMinus;
+      }
+      //attack next to that hit
+
+
+      ////////IDK ABOUT THIS/////
+
+      //check hits against sinks. If hit doesn't match any sinks, strike near the hit
+
+      // hitsArray.forEach(hitPosition => {
+      //   //check to see if it's in a sink
+      //   //if it's not in a sink, attack a nearby position
+      //   if(!sinkArray.some(checkSinks)){
+      //     console.log(hitPosition+'hit position not in sink')
+
+      //     //choose x or y
+      //     let zeroOrOne = Math.round(Math.random());
+
+      //     //add or subtract 1
+      //     let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+
+      //     attackCoords = [...hitPosition];
+      //     attackCoords[zeroOrOne] += plusOrMinus;
+
+      //     /////////
+      //     /* 
+      //     Issue is that if the last hit 
+      //     (the one that is actually used for attackCoords)
+      //     is surrounded by previously hit tiles,
+      //     it can't attack a tile next to it
+      //     */
+      //   }
+
+      //   function checkSinks(sinkPosition){
+      //     return hitPosition[0]==sinkPosition[0] && hitPosition[1]==sinkPosition[1];
+      //   }
+
+      // });
+      ///////
+      ////
     }else{
       attackCoords = coords;
     }
