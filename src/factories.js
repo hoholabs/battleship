@@ -48,12 +48,12 @@ const gameboardFactory = (name,spaces) => {
     let isError = 1;
 
     if(name === null){
-      console.log('invalid ship');
+      //'invalid ship');
       return 0;
     }
 
     if((o== 0 && spaces-size-x<0) || (o==1 && spaces-size-y<0)){
-      console.log('invalid ship placement');
+      //'invalid ship placement');
       return 0;
     }
 
@@ -82,7 +82,7 @@ const gameboardFactory = (name,spaces) => {
 
           if(newShipPosition[0] === existingShipPosition[0] && 
             newShipPosition[1] === existingShipPosition[1]){
-            console.log('ships overlap');
+            //'ships overlap');
              ///I don't like this at all. But it works for now. Should fix when I know more
              ///return 0 didn't work here, and I don't know why
             isError = 0;
@@ -103,7 +103,7 @@ const gameboardFactory = (name,spaces) => {
   };
 
   const receiveAttack = ([x,y]) =>{
-    console.log('attack received'+x+y)
+    //'attack received'+x+y)
     
     //check to see if the coord has already been used
 
@@ -137,7 +137,6 @@ const gameboardFactory = (name,spaces) => {
             currentShip.pos.forEach(sunkShipPosition => {
               sinks.push(sunkShipPosition);
             });
-            //console.log(sinks);
           }
 
           return [true,currentShip.isSunk()];
@@ -181,39 +180,47 @@ export const playerFactory = (name,spaces) => {
       let y = Math.floor(Math.random()*10);
       attackCoords = [x,y];
 
-      let sinkArray = target.gameBoard.sinks;
-      let hitsArray = target.gameBoard.hits;
-      let nakedHitsArray = [];
-
-      //clear any sinks from nakedHitsArray
-
-      nakedHitsArray.forEach(nakedHit => {
-
-        for (let index = 0; index < sinkArray.length; index++) {
-          let thisSink = sinkArray[index];
-
-          if(thisSink[0]==nakedHit[0] && thisSink[1]==nakedHit[1]){
-            
-          }
-          
-        }
- 
-      });
-
+      let sinksArray = [...target.gameBoard.sinks];
+      let hitsArray = [...target.gameBoard.hits];
 
       //make a list of hits that are not in sinks
-      hitsArray.forEach(hitPosition => {
-        if (!sinkArray.includes(hitPosition)){
-         
-          nakedHitsArray.push(hitPosition);
-          //console.log(nakedHitsArray);
-        }
+      let nakedHitsArray = [...hitsArray];
 
+      let badHits = [];
+
+
+      nakedHitsArray.forEach(nakedHit => {
+        
+        sinksArray.forEach(sinkHit => {
+          
+          if(sinkHit[0]===nakedHit[0] && sinkHit[1]===nakedHit[1]){
+            //we have a hit in a sink
+            
+            badHits.push(nakedHitsArray.findIndex(checkEquality));
+
+            function checkEquality(array){
+
+              return array[0]==sinkHit[0] && array[1]==sinkHit[1];
+
+            }
+
+          }
+          
+        });
+        
       });
+
+      //remove those hits from naked hits array
+      badHits.reverse();
+      badHits.forEach(badHitIndex => {
+        nakedHitsArray.splice(badHitIndex,1)
+      });
+
+
+
       //randomly choose one of those hits
 
       let randomNakedHit = nakedHitsArray[Math.floor(Math.random() * nakedHitsArray.length)];
-      //console.log(randomNakedHit);
 
       //if randomNakedHit is defined
       if (typeof randomNakedHit !== 'undefined') {
@@ -225,46 +232,12 @@ export const playerFactory = (name,spaces) => {
       let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
 
       attackCoords = [...randomNakedHit];
+
+      //attack next to that hit
       attackCoords[zeroOrOne] += plusOrMinus;
       }
-      //attack next to that hit
 
 
-      ////////IDK ABOUT THIS/////
-
-      //check hits against sinks. If hit doesn't match any sinks, strike near the hit
-
-      // hitsArray.forEach(hitPosition => {
-      //   //check to see if it's in a sink
-      //   //if it's not in a sink, attack a nearby position
-      //   if(!sinkArray.some(checkSinks)){
-      //     console.log(hitPosition+'hit position not in sink')
-
-      //     //choose x or y
-      //     let zeroOrOne = Math.round(Math.random());
-
-      //     //add or subtract 1
-      //     let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-
-      //     attackCoords = [...hitPosition];
-      //     attackCoords[zeroOrOne] += plusOrMinus;
-
-      //     /////////
-      //     /* 
-      //     Issue is that if the last hit 
-      //     (the one that is actually used for attackCoords)
-      //     is surrounded by previously hit tiles,
-      //     it can't attack a tile next to it
-      //     */
-      //   }
-
-      //   function checkSinks(sinkPosition){
-      //     return hitPosition[0]==sinkPosition[0] && hitPosition[1]==sinkPosition[1];
-      //   }
-
-      // });
-      ///////
-      ////
     }else{
       attackCoords = coords;
     }
