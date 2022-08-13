@@ -5,10 +5,34 @@
 main{
     margin:auto;
     display:grid;
-    border: solid blue 2px;
+    //border: solid blue 2px;
     width: 60vmax;
-    height: 30vmax;
+    height: 40vmax;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 10vmax 1fr;
+
+}
+
+#info-container{
+    //border: solid red 2px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    display:flex;
+    white-space: pre-line;
+    align-items: center;
+    justify-content: center;
+    //grid-template-columns: 1fr 1fr;
+
+}
+
+#table-top{
+    //border: solid green 2px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    
+
 }
 
 #start-menu{

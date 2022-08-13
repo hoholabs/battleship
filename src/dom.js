@@ -4,40 +4,50 @@ import {computer, human} from './index';
 const mainContainer = document.createElement('main');
 mainContainer.id = 'main-container'; 
 
+const infoContainer = document.createElement('div');
+infoContainer.id = 'info-container';
+
+const tableTop = document.createElement('div');
+tableTop.id = 'table-top';   
+
 export function createPage(){
 
     document.body.appendChild(mainContainer);
-    const table = document.createElement('div');
-    table.id = 'table';   
 
-    //mainContainer.append(table);
+
+    mainContainer.append(infoContainer);
+
+    mainContainer.append(tableTop);
+
 }
 
 export function setupGameDom(player){
 
     //append the player's gameboard
-    mainContainer.append(player.gameBoard.boardDisplay);
+    tableTop.append(player.gameBoard.boardDisplay);
 
-    let startMenu = document.createElement('div');
-    startMenu.id = 'start-menu';
+    infoContainer.textContent = 'Click the green tile to rotate your ships. \r\n Once you have selected a ship, click on your board to place it';
+    infoContainer.textContent = 'doodoo'
+    // let startMenu = document.createElement('div');
+    // startMenu.id = 'start-menu';
 
-    let startMenuTitle = document.createElement('div');
-    startMenuTitle.id = 'start-menu-title';
-    //startMenuTitle.textContent = "Place your ships!";
+    // let startMenuTitle = document.createElement('div');
+    // startMenuTitle.id = 'start-menu-title';
+    // startMenuTitle.textContent = "Place your ships!";
 
-    let startBtn = document.createElement('button');
-    startBtn.id = 'start-btn';
-    startBtn.innerHTML = "GO";
+    // let startBtn = document.createElement('button');
+    // startBtn.id = 'start-btn';
+    // startBtn.innerHTML = "GO";
 
     // startBtn.addEventListener('click', ()=>{
     //     startMenu.remove();
     //     startGame();
     // })
 
-    startMenu.append(startMenuTitle);
+    //startMenu.append(startMenuTitle);
     
     //I want to call this once all ships are placed
-    startMenu.append(startBtn);
+    //startMenu.append(startBtn);
 
    shipPickerBoard()
    shipDropperBoard();
@@ -48,9 +58,10 @@ function startGameDom(computer){
     let shipPalette = document.getElementById('ship-palette');
     shipPalette.remove();
 
-    mainContainer.append(computer.gameBoard.boardDisplay);
+    tableTop.append(computer.gameBoard.boardDisplay);
     readyBoard(computer.gameBoard.boardDisplay);
 
+    //randomly place computer ships
     while (computer.gameBoard.placeShip('patrol',2,     'rnd','rnd','rnd') == 0) {}
     while (computer.gameBoard.placeShip('submarine',3,  'rnd','rnd','rnd') == 0) {}
     while (computer.gameBoard.placeShip('destroyer',3,  'rnd','rnd','rnd') == 0) {}
@@ -58,7 +69,6 @@ function startGameDom(computer){
     while (computer.gameBoard.placeShip('carrier',5,    'rnd','rnd','rnd') == 0) {}
 
     showShips(computer);
-
 }
 
 const currentShip = {
@@ -72,7 +82,7 @@ function shipPickerBoard(){
 
     let shipPalette = domBoard('palette',10);
     shipPalette.id = 'ship-palette';
-    mainContainer.append(shipPalette);
+    tableTop.append(shipPalette);
 
 
     //show ships
