@@ -51,13 +51,13 @@ function startGameDom(computer){
     mainContainer.append(computer.gameBoard.boardDisplay);
     readyBoard(computer.gameBoard.boardDisplay);
 
-    computer.gameBoard.placeShip('patrol',2,0,0,0);
-    computer.gameBoard.placeShip('submarine',3,3,3,1);
-    computer.gameBoard.placeShip('destroyer',3,5,5,1);
-    computer.gameBoard.placeShip('battleship',4,3,1,0);
-    computer.gameBoard.placeShip('carrier',5,2,9,0);
+    while (computer.gameBoard.placeShip('patrol',2,     'rnd','rnd','rnd') == 0) {}
+    while (computer.gameBoard.placeShip('submarine',3,  'rnd','rnd','rnd') == 0) {}
+    while (computer.gameBoard.placeShip('destroyer',3,  'rnd','rnd','rnd') == 0) {}
+    while (computer.gameBoard.placeShip('battleship',4, 'rnd','rnd','rnd') == 0) {}
+    while (computer.gameBoard.placeShip('carrier',5,    'rnd','rnd','rnd') == 0) {}
 
-    //showShips(computer);
+    showShips(computer);
 
 }
 

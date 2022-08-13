@@ -47,11 +47,26 @@ const gameboardFactory = (name,spaces) => {
   const placeShip = (name,size,x,y,o) =>{
     let isError = 1;
 
+    //allow for random placement
+    if(x == 'rnd'){
+      x = Math.floor(Math.random()*spaces)
+      console.log('x='+x);
+    }
+    if(y == 'rnd'){
+      y = Math.round(Math.random()*spaces)
+      console.log('y='+y);
+    }
+    if(o == 'rnd'){
+      o = Math.round(Math.random());
+      console.log('o='+o);
+    }
+
     if(name === null){
       //'invalid ship');
       return 0;
     }
 
+    //stop ships from being placed so that they extend past the board
     if((o== 0 && spaces-size-x<0) || (o==1 && spaces-size-y<0)){
       //'invalid ship placement');
       return 0;
@@ -161,7 +176,7 @@ return true;
 
   let boardDisplay = domBoard(name, spaces);
 
-  return {name, placeShip, receiveAttack, gameOver, hits, sinks, misses, ships, boardDisplay};
+  return {name, spaces, placeShip, receiveAttack, gameOver, hits, sinks, misses, ships, boardDisplay};
 };
 
 export const playerFactory = (name,spaces) => {
@@ -173,7 +188,6 @@ export const playerFactory = (name,spaces) => {
     let attackCoords = [0,0];
     
     if (coords == 'ai'){
-      console.log('coords = ai'); 
 
       //random square chosen
       let x = Math.floor(Math.random()*10);
@@ -235,13 +249,24 @@ export const playerFactory = (name,spaces) => {
 
       //attack next to that hit
       attackCoords[zeroOrOne] += plusOrMinus;
+
+      //make sure the attack isn't off the board
+      if(
+        (attackCoords[0] >= target.gameBoard.spaces) ||
+        (attackCoords[1] >= target.gameBoard.spaces) ||
+        (attackCoords[0] < 0) ||
+        (attackCoords[1] < 0) )
+        {
+          attackCoords = [x,y];
+      }
+
       }
 
 
     }else{
       attackCoords = coords;
     }
-
+    console.log(attackCoords);
    return target.gameBoard.receiveAttack(attackCoords);
 
   };
