@@ -48,7 +48,6 @@ export function setupGameDom(player){
 
     //append the player's gameboard
     tableTop.append(player.gameBoard.boardDisplay);
-    console.log(player.gameBoard);
     showShips(player);
 
     //set info container text
@@ -70,13 +69,13 @@ function startGameDom(computer){
     readyBoard(computer.gameBoard.boardDisplay);
 
     //randomly place computer ships
-    // while (computer.gameBoard.placeShip('patrol',2,     'rnd','rnd','rnd') == 0) {}
-    // while (computer.gameBoard.placeShip('submarine',3,  'rnd','rnd','rnd') == 0) {}
-    // while (computer.gameBoard.placeShip('destroyer',3,  'rnd','rnd','rnd') == 0) {}
-    // while (computer.gameBoard.placeShip('battleship',4, 'rnd','rnd','rnd') == 0) {}
-    // while (computer.gameBoard.placeShip('carrier',5,    'rnd','rnd','rnd') == 0) {}
+    while (computer.gameBoard.placeShip('patrol',2,     'rnd','rnd','rnd') == 0) {}
+    while (computer.gameBoard.placeShip('submarine',3,  'rnd','rnd','rnd') == 0) {}
+    while (computer.gameBoard.placeShip('destroyer',3,  'rnd','rnd','rnd') == 0) {}
+    while (computer.gameBoard.placeShip('battleship',4, 'rnd','rnd','rnd') == 0) {}
+    while (computer.gameBoard.placeShip('carrier',5,    'rnd','rnd','rnd') == 0) {}
 
-    computer.gameBoard.placeShip('patrol',2,0,0,0)
+    //computer.gameBoard.placeShip('patrol',2,0,0,0)
 
     infoContainer.textContent = "Click on the computer's board to attack!"
 
@@ -120,7 +119,6 @@ function shipDropperBoard(){
 
         //place ship event listener
         tile.addEventListener('click',()=>{
-            console.log(human);
 
             let coordsX = parseInt(coords[0]);
             let coordsY = parseInt(coords[1]);
