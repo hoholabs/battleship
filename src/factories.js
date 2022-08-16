@@ -50,15 +50,12 @@ const gameboardFactory = (name,spaces) => {
     //allow for random placement
     if(x == 'rnd'){
       x = Math.floor(Math.random()*spaces)
-      console.log('x='+x);
     }
     if(y == 'rnd'){
       y = Math.round(Math.random()*spaces)
-      console.log('y='+y);
     }
     if(o == 'rnd'){
       o = Math.round(Math.random());
-      console.log('o='+o);
     }
 
     if(name === null){
@@ -174,9 +171,21 @@ return true;
 
   }
 
+  const clearBoard = ()=>{
+    console.log('this');
+    console.log(this);
+     ships = [];
+     spots = [];
+     hits = [];
+     sinks = [];
+     misses = [];
+     console.log(name+' board cleared')
+     console.log(ships);
+  }
+
   let boardDisplay = domBoard(name, spaces);
 
-  return {name, spaces, placeShip, receiveAttack, gameOver, hits, sinks, misses, ships, boardDisplay};
+  return {name, spaces, placeShip, receiveAttack, gameOver, clearBoard, hits, sinks, misses, ships, boardDisplay};
 };
 
 export const playerFactory = (name,spaces) => {
@@ -266,7 +275,7 @@ export const playerFactory = (name,spaces) => {
     }else{
       attackCoords = coords;
     }
-    console.log(attackCoords);
+
    return target.gameBoard.receiveAttack(attackCoords);
 
   };
@@ -275,6 +284,7 @@ export const playerFactory = (name,spaces) => {
 
 }
 
+//testing stuff below
 var module = module || {};
 
   module.exports = {

@@ -6,6 +6,7 @@ main {
   margin: auto;
   display: -ms-grid;
   display: grid;
+  border: solid blue 2px;
   width: 60vmax;
   height: 40vmax;
   -ms-grid-columns: 1fr 1fr;

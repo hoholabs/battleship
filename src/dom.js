@@ -14,43 +14,51 @@ export function createPage(){
 
     document.body.appendChild(mainContainer);
 
+}
 
-    mainContainer.append(infoContainer);
+export function setupPlayersDom(){
 
-    mainContainer.append(tableTop);
+     
 
+     const playerSelect = document.createElement('div');
+     playerSelect.id = 'player-select';
+
+     const playerName = document.createElement('input');
+     playerName.id = 'player-name-input';
+
+     let startBtn = document.createElement('button');
+     startBtn.textContent = 'GO!';
+     
+     startBtn.addEventListener('click', ()=>{
+        playerSelect.remove();
+        setupGameDom(human);
+     })
+
+     playerSelect.append(playerName);
+     playerSelect.append(startBtn);
+
+     mainContainer.append(playerSelect);
 }
 
 export function setupGameDom(player){
 
+   mainContainer.append(infoContainer);
+
+    mainContainer.append(tableTop);
+
     //append the player's gameboard
     tableTop.append(player.gameBoard.boardDisplay);
+    console.log(player.gameBoard);
+    showShips(player);
 
+    //set info container text
     infoContainer.textContent = 'Click the green tile to rotate your ships. \r\n Once you have selected a ship, click on your board to place it';
-    infoContainer.textContent = 'doodoo'
-    // let startMenu = document.createElement('div');
-    // startMenu.id = 'start-menu';
 
-    // let startMenuTitle = document.createElement('div');
-    // startMenuTitle.id = 'start-menu-title';
-    // startMenuTitle.textContent = "Place your ships!";
+    //place the boards used for setting ships
+    shipPickerBoard()
 
-    // let startBtn = document.createElement('button');
-    // startBtn.id = 'start-btn';
-    // startBtn.innerHTML = "GO";
-
-    // startBtn.addEventListener('click', ()=>{
-    //     startMenu.remove();
-    //     startGame();
-    // })
-
-    //startMenu.append(startMenuTitle);
-    
-    //I want to call this once all ships are placed
-    //startMenu.append(startBtn);
-
-   shipPickerBoard()
-   shipDropperBoard();
+    //make the player's board a shipDropperBoard
+    shipDropperBoard();
 };
 
 function startGameDom(computer){
@@ -62,13 +70,17 @@ function startGameDom(computer){
     readyBoard(computer.gameBoard.boardDisplay);
 
     //randomly place computer ships
-    while (computer.gameBoard.placeShip('patrol',2,     'rnd','rnd','rnd') == 0) {}
-    while (computer.gameBoard.placeShip('submarine',3,  'rnd','rnd','rnd') == 0) {}
-    while (computer.gameBoard.placeShip('destroyer',3,  'rnd','rnd','rnd') == 0) {}
-    while (computer.gameBoard.placeShip('battleship',4, 'rnd','rnd','rnd') == 0) {}
-    while (computer.gameBoard.placeShip('carrier',5,    'rnd','rnd','rnd') == 0) {}
+    // while (computer.gameBoard.placeShip('patrol',2,     'rnd','rnd','rnd') == 0) {}
+    // while (computer.gameBoard.placeShip('submarine',3,  'rnd','rnd','rnd') == 0) {}
+    // while (computer.gameBoard.placeShip('destroyer',3,  'rnd','rnd','rnd') == 0) {}
+    // while (computer.gameBoard.placeShip('battleship',4, 'rnd','rnd','rnd') == 0) {}
+    // while (computer.gameBoard.placeShip('carrier',5,    'rnd','rnd','rnd') == 0) {}
 
-    showShips(computer);
+    computer.gameBoard.placeShip('patrol',2,0,0,0)
+
+    infoContainer.textContent = "Click on the computer's board to attack!"
+
+    //showShips(computer);
 }
 
 const currentShip = {
@@ -98,13 +110,17 @@ function shipDropperBoard(){
     let playerBoard = document.getElementById('humanGameboard');
 
     for (let index = 0; index < playerBoard.children.length; index++) {
-        const element = playerBoard.children[index];
+        const tile = playerBoard.children[index];
 
-        let coords = element.dataset.coord.split(",");
-        //console.log(coords);
+        //add the coords dataset to each tile
+        let coords = tile.dataset.coord.split(",");
+
+        //color each tile skyblue
+        tile.style.backgroundColor = 'skyblue'
 
         //place ship event listener
-        element.addEventListener('click',()=>{
+        tile.addEventListener('click',()=>{
+            console.log(human);
 
             let coordsX = parseInt(coords[0]);
             let coordsY = parseInt(coords[1]);
@@ -113,6 +129,7 @@ function shipDropperBoard(){
             let start = [currentShip.start.x,currentShip.start.y];
             let shipLength = currentShip.size;
             let shipDirection = currentShip.direction;
+
 
             if(human.gameBoard.placeShip(shipName,shipLength,coordsX,coordsY,shipDirection)===1){
             hidePickedShip(shipName,start,shipLength,shipDirection);
@@ -127,8 +144,7 @@ function shipDropperBoard(){
 
             showShips(human);
             if(human.gameBoard.ships.length==5){
-                console.log("start game")
-                startGameDom(computer);
+            startGameDom(computer);
             };
         })
         
@@ -142,7 +158,6 @@ function showPickedShip(name,start,size,direction){
     
     let rotateTile = shipPalette.querySelector(`[data-coord="${start}"]`);
     
-
     rotateTile.style.backgroundColor = 'green'
 
     //event listener to rotate tile to flip the ship
@@ -289,16 +304,36 @@ const newGameScreen = document.createElement('div');
 newGameScreen.id = 'new-game-screen';
 newGameScreen.textContent = `${player.name} wins!`
 
-// const newGameBtn = document.createElement('button');
-// newGameBtn.id = 'new-game-btn';
-// newGameBtn.textContent = 'play again?';
+const newGameBtn = document.createElement('button');
+newGameBtn.id = 'new-game-btn';
+newGameBtn.textContent = 'play again?';
 
-// newGameBtn.addEventListener('click', ()=>{
-//     clearMainContainer();
-// });
+newGameBtn.addEventListener('click', ()=>{
+
+    //IDK, I gave up on this. Reload the page instead.
+    location.reload();
+
+    // clearMainContainer();
+    // //clear tableTop
+    // while (tableTop.children.length>0) {
+    //     tableTop.lastChild.remove();
+    // }
+    // //clear gameBoards
+    // human.gameBoard.clearBoard();
+    // computer.gameBoard.clearBoard();
+
+    // // human.gameBoard.ships = [];
+    // // human.gameBoard.spots = [];
+    // // human.gameBoard.hits = [];
+    // // human.gameBoard.sinks = [];
+    // // human.gameBoard.misses = [];
+
+    // setupGameDom(human);
+    // showShips(human);
+});
 
 
-// newGameScreen.append(newGameBtn);
+newGameScreen.append(newGameBtn);
 
 mainContainer.append(newGameScreen);
 }
